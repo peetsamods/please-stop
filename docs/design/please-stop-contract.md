@@ -53,7 +53,7 @@ Please Stop exists to stop unwanted residual creative flight drift when the main
 
 ## Not Claimed Yet
 
-- Public release readiness.
+- Broad release readiness beyond the approved public beta.
 - Compatibility with every modpack.
 - Anti-cheat safety.
 - Multiplayer policy approval.

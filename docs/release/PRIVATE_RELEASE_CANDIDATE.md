@@ -1,4 +1,4 @@
-# Please Stop Private Beta Candidate
+# Please Stop Public Beta Candidate
 
 ## Identity
 
@@ -35,7 +35,7 @@
 - Active held creative-flight input remains normal.
 - Exclusions: non-creative/non-flying movement, spectator, elytra/gliding, swimming, vehicles, recently-hurt knockback-adjacent movement, and unknown/server-correction-like velocity.
 
-## Private RC Proof Checklist
+## Beta Proof Checklist
 
 - `./gradlew clean test build`
 - Jar contains `fabric.mod.json`.
@@ -43,7 +43,7 @@
 - Jar contains `com/juliacoded/pleasestop/client/PleaseStopClient.class`.
 - Jar contains `com/juliacoded/pleasestop/client/CreativeFlightBrake.class`.
 - Jar contains `com/juliacoded/pleasestop/client/LaunchToastGate.class`.
-- Local jar hash is recorded for the current private test iteration.
+- Local jar hash is recorded for the current beta iteration.
 - Approved Modrinth profile loads Minecraft `1.21.11` with `please_stop`.
 - Approved top `New World` enters singleplayer.
 - Toggle smoke proof logs `Please Stop toggled on.` and `Please Stop toggled off.` in creative mode.
@@ -54,11 +54,11 @@
 
 - Build/test: `./gradlew clean test build` passed.
 - Port build/test: `./gradlew clean test build` passed for `1.21.1`; `JAVA_HOME=$(/usr/libexec/java_home -v 25) ./gradlew clean test build` passed for `26.2`.
-- the maintainer cross-world test: current private jars were tested across worlds and confirmed working.
-- Version posture: current private beta candidate is `0.1.0-beta.1+1.21.11`.
+- the maintainer cross-world test: current beta jars were tested across worlds and confirmed working.
+- Version posture: current public beta candidate is `0.1.0-beta.1+1.21.11`.
 - Jar contents: `fabric.mod.json`, `PleaseStopClient.class`, `CreativeFlightBrake.class`, `CreativeFlightBrake$State.class`, and `PleaseStopConfig.class` are present.
 - License proof: root `LICENSE` exists and `fabric.mod.json` declares `MIT`.
-- Current local private test jar hash: `9b04574e1d60741c001a14875b6a74c281e1c70a43a09e237eeaae18d609eb60`.
+- Current local beta jar hash: `9b04574e1d60741c001a14875b6a74c281e1c70a43a09e237eeaae18d609eb60`.
 - Smoke proof log: `/tmp/please-stop-phase6-rc-stopped-latest.log`.
 - Smoke screenshots: `/tmp/please-stop-phase6-rc-window.png` and `/tmp/please-stop-phase6-rc-toggle.png`.
 - Final profile config proof: `/tmp/please-stop-phase6-rc-final-config.json` contains `enabled=false`.
@@ -67,4 +67,4 @@
 
 ## Release Boundary
 
-This is a private beta-candidate packet only. Do not publish, upload, create public release drafts, or claim anti-cheat or broad multiplayer compatibility without the maintainer explicitly approving that next lane.
+This is the public beta-candidate packet. Public release is approved, but do not claim anti-cheat or broad multiplayer compatibility without proof.
