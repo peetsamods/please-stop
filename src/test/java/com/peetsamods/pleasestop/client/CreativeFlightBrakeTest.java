@@ -2,37 +2,37 @@ package com.peetsamods.pleasestop.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import net.minecraft.util.PlayerInput;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.player.Input;
+import net.minecraft.world.phys.Vec3;
 import org.junit.jupiter.api.Test;
 
 final class CreativeFlightBrakeTest {
-    private static final Vec3d DRIFT = new Vec3d(0.12, -0.03, 0.08);
+    private static final Vec3 DRIFT = new Vec3(0.12, -0.03, 0.08);
 
     @Test
     void stopsResidualDriftWhenEnabledCreativeFlyingAndInputsReleased() {
-        Vec3d result = CreativeFlightBrake.brakedVelocity(true, true, true, PlayerInput.DEFAULT, DRIFT, true, false);
+        Vec3 result = CreativeFlightBrake.brakedVelocity(true, true, true, Input.EMPTY, DRIFT, true, false);
 
-        assertEquals(Vec3d.ZERO, result);
+        assertEquals(Vec3.ZERO, result);
     }
 
     @Test
     void preservesVanillaVelocityWhenDisabled() {
-        Vec3d result = CreativeFlightBrake.brakedVelocity(false, true, true, PlayerInput.DEFAULT, DRIFT, true, false);
+        Vec3 result = CreativeFlightBrake.brakedVelocity(false, true, true, Input.EMPTY, DRIFT, true, false);
 
         assertEquals(DRIFT, result);
     }
 
     @Test
     void observesVanillaResidualDriftWhenDisabled() {
-        CreativeFlightBrake.Action result = CreativeFlightBrake.action(false, true, true, PlayerInput.DEFAULT, DRIFT, true, false);
+        CreativeFlightBrake.Action result = CreativeFlightBrake.action(false, true, true, Input.EMPTY, DRIFT, true, false);
 
         assertEquals(CreativeFlightBrake.Action.VANILLA_DRIFT_OBSERVED, result);
     }
 
     @Test
     void reportsBrakeWhenEnabled() {
-        CreativeFlightBrake.Action result = CreativeFlightBrake.action(true, true, true, PlayerInput.DEFAULT, DRIFT, true, false);
+        CreativeFlightBrake.Action result = CreativeFlightBrake.action(true, true, true, Input.EMPTY, DRIFT, true, false);
 
         assertEquals(CreativeFlightBrake.Action.BRAKE, result);
     }
@@ -54,29 +54,29 @@ final class CreativeFlightBrakeTest {
 
     @Test
     void reportsBrakeWhenJustEnabledDuringExistingDrift() {
-        CreativeFlightBrake.Action result = CreativeFlightBrake.action(true, true, true, PlayerInput.DEFAULT, DRIFT, false, true);
+        CreativeFlightBrake.Action result = CreativeFlightBrake.action(true, true, true, Input.EMPTY, DRIFT, false, true);
 
         assertEquals(CreativeFlightBrake.Action.BRAKE, result);
     }
 
     @Test
     void ignoresVelocityThatDidNotFollowFlightInputRelease() {
-        CreativeFlightBrake.Action result = CreativeFlightBrake.action(true, true, true, PlayerInput.DEFAULT, DRIFT, false, false);
+        CreativeFlightBrake.Action result = CreativeFlightBrake.action(true, true, true, Input.EMPTY, DRIFT, false, false);
 
         assertEquals(CreativeFlightBrake.Action.NONE, result);
     }
 
     @Test
     void ignoresZeroVelocity() {
-        CreativeFlightBrake.Action result = CreativeFlightBrake.action(true, true, true, PlayerInput.DEFAULT, Vec3d.ZERO, true, false);
+        CreativeFlightBrake.Action result = CreativeFlightBrake.action(true, true, true, Input.EMPTY, Vec3.ZERO, true, false);
 
         assertEquals(CreativeFlightBrake.Action.NONE, result);
     }
 
     @Test
     void preservesVelocityOutsideCreativeFlight() {
-        assertEquals(DRIFT, CreativeFlightBrake.brakedVelocity(true, false, true, PlayerInput.DEFAULT, DRIFT, true, false));
-        assertEquals(DRIFT, CreativeFlightBrake.brakedVelocity(true, true, false, PlayerInput.DEFAULT, DRIFT, true, false));
+        assertEquals(DRIFT, CreativeFlightBrake.brakedVelocity(true, false, true, Input.EMPTY, DRIFT, true, false));
+        assertEquals(DRIFT, CreativeFlightBrake.brakedVelocity(true, true, false, Input.EMPTY, DRIFT, true, false));
     }
 
     @Test
@@ -102,7 +102,7 @@ final class CreativeFlightBrakeTest {
         assertEquals(DRIFT, CreativeFlightBrake.brakedVelocity(true, true, true, input(false, false, false, false, false, true), DRIFT, true, false));
     }
 
-    private static PlayerInput input(
+    private static Input input(
             boolean forward,
             boolean backward,
             boolean left,
@@ -110,7 +110,7 @@ final class CreativeFlightBrakeTest {
             boolean jump,
             boolean sneak
     ) {
-        return new PlayerInput(forward, backward, left, right, jump, sneak, false);
+        return new Input(forward, backward, left, right, jump, sneak, false);
     }
 
     private static CreativeFlightBrake.State state() {
@@ -123,7 +123,7 @@ final class CreativeFlightBrakeTest {
                 false,
                 false,
                 false,
-                PlayerInput.DEFAULT,
+                Input.EMPTY,
                 DRIFT,
                 true,
                 false

@@ -1,29 +1,35 @@
 package com.peetsamods.pleasestop.client;
 
 import com.peetsamods.pleasestop.config.PleaseStopConfig;
+import com.mojang.blaze3d.platform.InputConstants;
+import java.io.IOException;
+import java.nio.file.Path;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.toasts.SystemToast;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.GameType;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.io.IOException;
-import java.nio.file.Path;
 
 public final class PleaseStopClient implements ClientModInitializer {
     public static final String MOD_ID = "please_stop";
     private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    private static final KeyBinding.Category CATEGORY = KeyBinding.Category.create(Identifier.of(MOD_ID, "controls"));
+    private static final KeyMapping.Category CATEGORY = KeyMapping.Category.register(
+            Identifier.fromNamespaceAndPath(MOD_ID, "controls")
+    );
 
     private PleaseStopConfig config;
     private Path configPath;
-    private KeyBinding toggleKeyBinding;
+    private KeyMapping toggleKeyMapping;
+    private KeyMapping toggleToastsKeyMapping;
+    private final LaunchToastGate launchToastGate = new LaunchToastGate();
     private boolean loggedActiveInput;
     private boolean loggedDisabledDrift;
     private boolean hadActiveFlightInputLastTick;
@@ -33,10 +39,16 @@ public final class PleaseStopClient implements ClientModInitializer {
     public void onInitializeClient() {
         configPath = FabricLoader.getInstance().getConfigDir().resolve(PleaseStopConfig.FILE_NAME);
         config = loadConfig(configPath);
-        toggleKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        toggleKeyMapping = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.please_stop.toggle",
-                InputUtil.Type.KEYSYM,
+                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_B,
+                CATEGORY
+        ));
+        toggleToastsKeyMapping = KeyMappingHelper.registerKeyMapping(new KeyMapping(
+                "key.please_stop.toggle_toasts",
+                InputConstants.Type.KEYSYM,
+                GLFW.GLFW_KEY_N,
                 CATEGORY
         ));
 
@@ -53,8 +65,17 @@ public final class PleaseStopClient implements ClientModInitializer {
         }
     }
 
-    private void onEndClientTick(MinecraftClient client) {
-        while (toggleKeyBinding.wasPressed()) {
+    private void onEndClientTick(Minecraft client) {
+        boolean userFacingControlsAllowed = allowsUserFacingControls(client);
+        if (launchToastGate.tick(client.player != null, userFacingControlsAllowed && config.showToasts())) {
+            showLaunchToast(client);
+        }
+
+        while (toggleKeyMapping.consumeClick()) {
+            if (!allowsUserFacingControls(client)) {
+                continue;
+            }
+
             boolean enabled = config.toggle();
             loggedActiveInput = false;
             loggedDisabledDrift = false;
@@ -62,6 +83,17 @@ public final class PleaseStopClient implements ClientModInitializer {
             saveConfig();
             sendToggleFeedback(client, enabled);
             LOGGER.info("Please Stop toggled {}.", enabled ? "on" : "off");
+        }
+
+        while (toggleToastsKeyMapping.consumeClick()) {
+            if (!allowsUserFacingControls(client)) {
+                continue;
+            }
+
+            boolean showToasts = config.toggleToasts();
+            saveConfig();
+            sendToastToggleFeedback(client, showToasts);
+            LOGGER.info("Please Stop launch toasts toggled {}.", showToasts ? "on" : "off");
         }
 
         CreativeFlightBrake.Action action = CreativeFlightBrake.apply(
@@ -89,12 +121,60 @@ public final class PleaseStopClient implements ClientModInitializer {
         hadActiveFlightInputLastTick = hasActiveFlightInput(client);
     }
 
-    private boolean hasActiveFlightInput(MinecraftClient client) {
-        return client.player != null
-                && client.player.isCreative()
+    private boolean hasActiveFlightInput(Minecraft client) {
+        return isCreativePlayer(client)
                 && client.player.getAbilities().flying
                 && client.player.input != null
-                && CreativeFlightBrake.hasActiveFlightInput(client.player.input.playerInput);
+                && CreativeFlightBrake.hasActiveFlightInput(client.player.input.keyPresses);
+    }
+
+    private boolean isCreativePlayer(Minecraft client) {
+        return client.player != null
+                && client.gameMode != null
+                && isCreativeGameMode(client.gameMode.getPlayerMode());
+    }
+
+    static boolean isCreativeGameMode(GameType gameType) {
+        return gameType == GameType.CREATIVE;
+    }
+
+    private boolean allowsUserFacingControls(Minecraft client) {
+        GameType clientGameType = client.gameMode == null
+                ? null
+                : client.gameMode.getPlayerMode();
+        return allowsUserFacingControls(
+                client.player != null,
+                client.player != null && client.player.isCreative(),
+                client.getSingleplayerServer() != null,
+                clientGameType,
+                getSingleplayerSaveGameType(client)
+        );
+    }
+
+    static boolean allowsUserFacingControls(
+            boolean playerPresent,
+            boolean playerCreative,
+            boolean singleplayer,
+            GameType clientGameType,
+            GameType singleplayerSaveGameType
+    ) {
+        if (!playerPresent || !playerCreative || !isCreativeGameMode(clientGameType)) {
+            return false;
+        }
+
+        if (singleplayer) {
+            return isCreativeGameMode(singleplayerSaveGameType);
+        }
+
+        return true;
+    }
+
+    private GameType getSingleplayerSaveGameType(Minecraft client) {
+        if (client.getSingleplayerServer() == null || client.getSingleplayerServer().getWorldData() == null) {
+            return null;
+        }
+
+        return client.getSingleplayerServer().getWorldData().getGameType();
     }
 
     private void saveConfig() {
@@ -105,11 +185,32 @@ public final class PleaseStopClient implements ClientModInitializer {
         }
     }
 
-    private void sendToggleFeedback(MinecraftClient client, boolean enabled) {
-        if (client.player != null) {
-            client.player.sendMessage(Text.translatable(enabled
+    private void sendToggleFeedback(Minecraft client, boolean enabled) {
+        if (allowsUserFacingControls(client)) {
+            client.player.sendOverlayMessage(Component.translatable(enabled
                     ? "message.please_stop.enabled"
-                    : "message.please_stop.disabled"), true);
+                    : "message.please_stop.disabled"));
         }
+    }
+
+    private void sendToastToggleFeedback(Minecraft client, boolean showToasts) {
+        if (allowsUserFacingControls(client)) {
+            client.player.sendOverlayMessage(Component.translatable(showToasts
+                    ? "message.please_stop.toasts_enabled"
+                    : "message.please_stop.toasts_disabled"));
+        }
+    }
+
+    private void showLaunchToast(Minecraft client) {
+        if (!allowsUserFacingControls(client)) {
+            return;
+        }
+
+        SystemToast.addOrUpdate(
+                client.gui.toastManager(),
+                SystemToast.SystemToastId.PERIODIC_NOTIFICATION,
+                Component.translatable("toast.please_stop.title"),
+                Component.translatable("toast.please_stop.body")
+        );
     }
 }

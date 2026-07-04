@@ -1,8 +1,8 @@
 package com.peetsamods.pleasestop.client;
 
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.util.PlayerInput;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.player.Input;
+import net.minecraft.world.phys.Vec3;
 
 final class CreativeFlightBrake {
     record State(
@@ -14,8 +14,8 @@ final class CreativeFlightBrake {
             boolean swimming,
             boolean inVehicle,
             boolean recentlyHurt,
-            PlayerInput input,
-            Vec3d currentVelocity,
+            Input input,
+            Vec3 currentVelocity,
             boolean hadActiveFlightInputLastTick,
             boolean justEnabled
     ) {
@@ -73,7 +73,7 @@ final class CreativeFlightBrake {
     private CreativeFlightBrake() {
     }
 
-    static Action apply(ClientPlayerEntity player, boolean enabled, boolean hadActiveFlightInputLastTick, boolean justEnabled) {
+    static Action apply(LocalPlayer player, boolean enabled, boolean hadActiveFlightInputLastTick, boolean justEnabled) {
         if (player == null || player.input == null) {
             return Action.NONE;
         }
@@ -83,37 +83,37 @@ final class CreativeFlightBrake {
                 player.isCreative(),
                 player.getAbilities().flying,
                 player.isSpectator(),
-                player.isGliding(),
+                player.isFallFlying(),
                 player.isSwimming(),
-                player.hasVehicle(),
+                player.isPassenger(),
                 player.hurtTime > 0,
-                player.input.playerInput,
-                player.getVelocity(),
+                player.input.keyPresses,
+                player.getDeltaMovement(),
                 hadActiveFlightInputLastTick,
                 justEnabled
         ));
 
         if (action == Action.BRAKE) {
-            player.setVelocity(Vec3d.ZERO);
+            player.setDeltaMovement(Vec3.ZERO);
         }
 
         return action;
     }
 
-    static Vec3d brakedVelocity(State state) {
+    static Vec3 brakedVelocity(State state) {
         if (action(state) == Action.BRAKE) {
-            return Vec3d.ZERO;
+            return Vec3.ZERO;
         }
 
         return state.currentVelocity();
     }
 
-    static Vec3d brakedVelocity(
+    static Vec3 brakedVelocity(
             boolean enabled,
             boolean creative,
             boolean flying,
-            PlayerInput input,
-            Vec3d currentVelocity,
+            Input input,
+            Vec3 currentVelocity,
             boolean hadActiveFlightInputLastTick,
             boolean justEnabled
     ) {
@@ -141,7 +141,7 @@ final class CreativeFlightBrake {
                 || state.swimming()
                 || state.inVehicle()
                 || state.recentlyHurt()
-                || state.currentVelocity().equals(Vec3d.ZERO)) {
+                || state.currentVelocity().equals(Vec3.ZERO)) {
             return Action.NONE;
         }
 
@@ -160,8 +160,8 @@ final class CreativeFlightBrake {
             boolean enabled,
             boolean creative,
             boolean flying,
-            PlayerInput input,
-            Vec3d currentVelocity,
+            Input input,
+            Vec3 currentVelocity,
             boolean hadActiveFlightInputLastTick,
             boolean justEnabled
     ) {
@@ -181,13 +181,13 @@ final class CreativeFlightBrake {
         ));
     }
 
-    static boolean hasActiveFlightInput(PlayerInput input) {
-        PlayerInput playerInput = input == null ? PlayerInput.DEFAULT : input;
+    static boolean hasActiveFlightInput(Input input) {
+        Input playerInput = input == null ? Input.EMPTY : input;
         return playerInput.forward()
                 || playerInput.backward()
                 || playerInput.left()
                 || playerInput.right()
                 || playerInput.jump()
-                || playerInput.sneak();
+                || playerInput.shift();
     }
 }
