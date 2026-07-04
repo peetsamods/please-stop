@@ -1,5 +1,14 @@
 # Please Stop Changelog
 
+## Private test iteration - creative-only feedback and toast controls
+
+- Added the `Toggle Please Stop Toasts` keybind, defaulting to `N`.
+- Added local persisted `showToasts` config at `config/please_stop.json`, defaulting to `true`.
+- Added a creative-only launch reminder toast: `Toggle Please Stop with B, configurable in key binds.`
+- Kept `Toggle Please Stop` applicable only in creative mode; pressing it outside creative mode does not toggle `enabled` and does not show `Please Stop: ON/OFF`.
+- Kept toast and toast-toggle actionbar feedback out of non-creative worlds.
+- Prepared private test iterations for Minecraft `1.21.1` and `26.2`; public upload remains unapproved.
+
 ## 0.1.0-alpha.0+1.21.11 - Private Release Candidate
 
 - Added the `Toggle Please Stop` keybind, defaulting to `B`.
