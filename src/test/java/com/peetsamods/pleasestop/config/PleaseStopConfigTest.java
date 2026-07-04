@@ -1,0 +1,74 @@
+package com.peetsamods.pleasestop.config;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+final class PleaseStopConfigTest {
+    @TempDir
+    private Path tempDir;
+
+    @Test
+    void missingConfigDefaultsToDisabled() {
+        Path configPath = tempDir.resolve("please_stop.json");
+
+        PleaseStopConfig config = PleaseStopConfig.load(configPath);
+
+        assertFalse(config.isEnabled());
+    }
+
+    @Test
+    void loadOrCreateWritesMissingDefaultConfig() throws Exception {
+        Path configPath = tempDir.resolve("please_stop.json");
+
+        PleaseStopConfig config = PleaseStopConfig.loadOrCreate(configPath);
+
+        assertFalse(config.isEnabled());
+        assertTrue(Files.readString(configPath).contains("\"enabled\": false"));
+    }
+
+    @Test
+    void loadsEnabledValueFromJson() throws Exception {
+        Path configPath = tempDir.resolve("please_stop.json");
+        Files.writeString(configPath, "{ \"enabled\": true }");
+
+        PleaseStopConfig config = PleaseStopConfig.load(configPath);
+
+        assertTrue(config.isEnabled());
+    }
+
+    @Test
+    void invalidConfigFallsBackToDisabled() throws Exception {
+        Path configPath = tempDir.resolve("please_stop.json");
+        Files.writeString(configPath, "{ nope");
+
+        PleaseStopConfig config = PleaseStopConfig.load(configPath);
+
+        assertFalse(config.isEnabled());
+    }
+
+    @Test
+    void nonBooleanEnabledFallsBackToDisabled() throws Exception {
+        Path configPath = tempDir.resolve("please_stop.json");
+        Files.writeString(configPath, "{ \"enabled\": \"true\" }");
+
+        PleaseStopConfig config = PleaseStopConfig.load(configPath);
+
+        assertFalse(config.isEnabled());
+    }
+
+    @Test
+    void toggleCanBeSavedAndReloaded() throws Exception {
+        Path configPath = tempDir.resolve("nested").resolve("please_stop.json");
+        PleaseStopConfig config = PleaseStopConfig.load(configPath);
+
+        assertTrue(config.toggle());
+        config.save(configPath);
+
+        assertTrue(PleaseStopConfig.load(configPath).isEnabled());
+    }
+}

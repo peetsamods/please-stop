@@ -13,22 +13,24 @@ This file defines the planned v1 config surface. It must stay consistent with [p
 ## Keybind
 
 - Name: `Toggle Please Stop`
+- Default key: `B`
 - Action: invert `enabled`
 - Persistence: save the new value to the local config
-- Feedback: minimal local feedback is allowed, but not required for the first proof
+- Feedback: local actionbar text shows `Please Stop: ON` or `Please Stop: OFF`
 
 ## Defaults
 
 - `enabled` defaults to `false`.
 - The player must intentionally turn it on.
 - Missing config should recreate the default.
-- Invalid config should fall back safely to `false` and report the issue only if diagnostics exist.
+- Invalid config or a non-boolean `enabled` value should fall back safely to `false` and report the issue only if diagnostics exist.
 
 ## File Location
 
-- Not pinned yet.
-- The exact config path and library, if any, must be chosen after Fabric/toolchain verification.
-- The first implementation should prefer the simplest local client persistence pattern already accepted for the chosen loader/version.
+- Pinned location: Fabric Loader config dir plus `please_stop.json`.
+- In the approved Modrinth profile, that resolves to `config/please_stop.json` inside the profile root.
+- Format: JSON object with one boolean field, `enabled`.
+- Parser/writer: Gson.
 
 ## Migration Posture
 

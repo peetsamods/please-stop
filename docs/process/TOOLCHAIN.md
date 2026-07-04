@@ -27,6 +27,7 @@ These values were verified from primary/current metadata on 2026-07-04. If a lat
 | Gradle wrapper | `9.6.1` | Gradle current release metadata |
 | Mappings | Yarn `1.21.11+build.6` | Fabric Yarn Maven metadata, latest `1.21.11` build |
 | Intermediary | `1.21.11` | Fabric loader/intermediary metadata for Minecraft `1.21.11` |
+| JUnit Jupiter | `6.1.1` | Maven Central/Sonatype artifact metadata |
 
 ## Source URLs
 
@@ -38,6 +39,7 @@ These values were verified from primary/current metadata on 2026-07-04. If a lat
 - Fabric Loom Maven metadata: `https://maven.fabricmc.net/net/fabricmc/fabric-loom/maven-metadata.xml`
 - Fabric Yarn Maven metadata: `https://maven.fabricmc.net/net/fabricmc/yarn/maven-metadata.xml`
 - Gradle current release metadata: `https://services.gradle.org/versions/current`
+- JUnit Jupiter artifact metadata: `https://central.sonatype.com/artifact/org.junit.jupiter/junit-jupiter`
 
 ## Verification Snapshot
 
@@ -50,6 +52,7 @@ These values were verified from primary/current metadata on 2026-07-04. If a lat
 - Fabric Loom Maven metadata release is `1.17.13`.
 - Fabric Yarn Maven metadata latest `1.21.11` artifact is `1.21.11+build.6`.
 - Gradle current release metadata reports `9.6.1`.
+- Maven Central/Sonatype reports JUnit Jupiter `6.1.1`; Gradle `9.6.1` test runtime requires the matching JUnit Platform launcher explicitly.
 
 ## Accepted Evidence
 
@@ -66,6 +69,7 @@ If sources disagree later, stop and report the conflict before implementation.
 
 - Build proof: `./gradlew build`
 - Load proof: launch a local client and confirm Please Stop is listed and the client initializer runs without classloading errors.
+- Config/toggle proof: `./gradlew test build`, then live-launch and verify keybind persistence in the approved profile.
 
 ## Side Boundaries
 

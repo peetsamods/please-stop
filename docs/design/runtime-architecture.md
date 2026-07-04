@@ -5,7 +5,7 @@
 Please Stop is planned as a Fabric-first client mod. The first implementation should be as small as possible:
 
 - Client initializer for keybind/config setup.
-- Config manager for loading, saving, and validating `enabled`.
+- Config manager for loading, saving, and validating `enabled` at `config/please_stop.json`.
 - Keybind handler for flipping `enabled` and saving the new state.
 - Inertia controller for checking eligibility and applying the narrow drift stop.
 - No server command surface in v1.
@@ -23,16 +23,17 @@ Please Stop is planned as a Fabric-first client mod. The first implementation sh
 ## Data Flow
 
 1. Client starts.
-2. Config loads `enabled`, defaulting to `false` if missing.
+2. Config loads `enabled` from Fabric's config dir, defaulting to `false` and creating `please_stop.json` if missing.
 3. Keybind registration exposes `Toggle Please Stop`.
-4. During the narrow movement check, the mod verifies:
+4. Pressing the keybind flips `enabled`, saves immediately, logs the new state, and shows local actionbar feedback.
+5. During the narrow movement check, the mod verifies:
    - local player exists;
    - config is enabled;
    - player is in creative mode;
    - player is flying;
    - movement/up/down inputs are released.
-5. If all conditions are true, residual creative flight drift is cleared.
-6. If any condition is false, vanilla behavior continues.
+6. If all conditions are true, residual creative flight drift is cleared.
+7. If any condition is false, vanilla behavior continues.
 
 ## Failure Modes
 
@@ -46,7 +47,7 @@ Please Stop is planned as a Fabric-first client mod. The first implementation sh
 
 - Build proof after scaffold: `./gradlew build`.
 - Load proof after scaffold: client reaches title screen with Please Stop installed.
-- Toggle proof after implementation: keybind flips `enabled` and persists after restart.
+- Toggle proof after implementation: config tests pass; keybind flips `enabled`; config persists after restart.
 - Gameplay proof after implementation: creative flight drift stops only when enabled and input is released.
 - Exclusion proof: survival, spectator, elytra, vehicle, swimming, and knockback-adjacent states are not intentionally changed.
 
