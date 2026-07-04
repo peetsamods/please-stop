@@ -24,6 +24,10 @@ public final class PleaseStopClient implements ClientModInitializer {
     private PleaseStopConfig config;
     private Path configPath;
     private KeyBinding toggleKeyBinding;
+    private boolean loggedActiveInput;
+    private boolean loggedDisabledDrift;
+    private boolean hadActiveFlightInputLastTick;
+    private boolean brakeAfterToggleOn;
 
     @Override
     public void onInitializeClient() {
@@ -52,10 +56,45 @@ public final class PleaseStopClient implements ClientModInitializer {
     private void onEndClientTick(MinecraftClient client) {
         while (toggleKeyBinding.wasPressed()) {
             boolean enabled = config.toggle();
+            loggedActiveInput = false;
+            loggedDisabledDrift = false;
+            brakeAfterToggleOn = enabled;
             saveConfig();
             sendToggleFeedback(client, enabled);
             LOGGER.info("Please Stop toggled {}.", enabled ? "on" : "off");
         }
+
+        CreativeFlightBrake.Action action = CreativeFlightBrake.apply(
+                client.player,
+                config.isEnabled(),
+                hadActiveFlightInputLastTick,
+                brakeAfterToggleOn
+        );
+        brakeAfterToggleOn = false;
+
+        if (action == CreativeFlightBrake.Action.BRAKE) {
+            LOGGER.info("Please Stop cleared residual creative flight drift.");
+            loggedActiveInput = false;
+        } else if (action == CreativeFlightBrake.Action.ACTIVE_FLIGHT_INPUT_OBSERVED && !loggedActiveInput) {
+            LOGGER.info("Please Stop preserved active creative flight input.");
+            loggedActiveInput = true;
+        } else if (action == CreativeFlightBrake.Action.VANILLA_DRIFT_OBSERVED && !loggedDisabledDrift) {
+            LOGGER.info("Please Stop observed vanilla creative flight drift while disabled.");
+            loggedDisabledDrift = true;
+        } else if (action == CreativeFlightBrake.Action.NONE) {
+            loggedActiveInput = false;
+            loggedDisabledDrift = false;
+        }
+
+        hadActiveFlightInputLastTick = hasActiveFlightInput(client);
+    }
+
+    private boolean hasActiveFlightInput(MinecraftClient client) {
+        return client.player != null
+                && client.player.isCreative()
+                && client.player.getAbilities().flying
+                && client.player.input != null
+                && CreativeFlightBrake.hasActiveFlightInput(client.player.input.playerInput);
     }
 
     private void saveConfig() {

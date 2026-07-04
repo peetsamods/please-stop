@@ -11,6 +11,6 @@ Planned v1 behavior:
 - When enabled, creative flight inertia stops immediately after movement, jump, or sneak input is released.
 - When disabled, vanilla creative flight behavior remains unchanged.
 
-This repo now has a Fabric client scaffold with the `Toggle Please Stop` keybind and local persisted `enabled` config for Minecraft `1.21.11`. It does not yet have the creative-flight brake, release artifact, or public upload approval.
+This repo now has a Fabric client scaffold with the `Toggle Please Stop` keybind, local persisted `enabled` config, and the first creative-flight brake for Minecraft `1.21.11`. It does not yet have exclusion hardening, a release artifact, or public upload approval.
 
 Start with [docs/BINDER.md](docs/BINDER.md).

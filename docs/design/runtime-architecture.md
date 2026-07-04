@@ -32,8 +32,9 @@ Please Stop is planned as a Fabric-first client mod. The first implementation sh
    - player is in creative mode;
    - player is flying;
    - movement/up/down inputs are released.
-6. If all conditions are true, residual creative flight drift is cleared.
-7. If any condition is false, vanilla behavior continues.
+6. To avoid treating unrelated velocity as creative-flight inertia, the brake only acts after recent flight input release or immediately after the keybind has toggled the mod on.
+7. If all conditions are true, residual creative flight drift is cleared.
+8. If any condition is false, vanilla behavior continues.
 
 ## Failure Modes
 
@@ -49,6 +50,7 @@ Please Stop is planned as a Fabric-first client mod. The first implementation sh
 - Load proof after scaffold: client reaches title screen with Please Stop installed.
 - Toggle proof after implementation: config tests pass; keybind flips `enabled`; config persists after restart.
 - Gameplay proof after implementation: creative flight drift stops only when enabled and input is released.
+- Phase 4 diagnostic proof: while enabled, log active creative-flight input preservation and residual creative drift clearance; while disabled, log vanilla creative drift observation.
 - Exclusion proof: survival, spectator, elytra, vehicle, swimming, and knockback-adjacent states are not intentionally changed.
 
 ## Not In v1
