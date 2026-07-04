@@ -1,25 +1,24 @@
 # Please Stop Changelog
 
-## 0.1.0-beta.1 - Private Beta Candidate
+## 0.1.0-beta.1 - Public Beta Candidate
 
-- Graduated the private test posture from alpha to beta after the maintainer tested the jars across worlds and confirmed the behavior works.
+- Graduated from private testing to public beta after the maintainer tested the jars across worlds and confirmed the behavior works.
 - Kept creative-only UI hardening: launch toasts, `Please Stop: ON/OFF`, and toast-toggle feedback do not appear in survival/non-creative worlds.
-- Kept the release boundary private; public upload remains unapproved.
-- Expected version labels for the next beta jars:
+- Prepared the first public beta jars:
   - `0.1.0-beta.1+1.21.11`
   - `0.1.0-beta.1+1.21.1`
   - `0.1.0-beta.1+26.2`
 
-## Private test iteration - creative-only feedback and toast controls
+## Test iteration - creative-only feedback and toast controls
 
 - Added the `Toggle Please Stop Toasts` keybind, defaulting to `N`.
 - Added local persisted `showToasts` config at `config/please_stop.json`, defaulting to `true`.
 - Added a creative-only launch reminder toast: `Toggle Please Stop with B, configurable in key binds.`
 - Kept `Toggle Please Stop` applicable only in creative mode; pressing it outside creative mode does not toggle `enabled` and does not show `Please Stop: ON/OFF`.
 - Kept toast and toast-toggle actionbar feedback out of non-creative worlds.
-- Prepared private test iterations for Minecraft `1.21.1` and `26.2`; public upload remains unapproved.
+- Prepared beta iterations for Minecraft `1.21.1` and `26.2`.
 
-## 0.1.0-alpha.0+1.21.11 - Private Release Candidate
+## 0.1.0-alpha.0+1.21.11 - Internal Release Candidate
 
 - Added the `Toggle Please Stop` keybind, defaulting to `B`.
 - Added local persisted config at `config/please_stop.json`, defaulting to `enabled=false`.
@@ -28,4 +27,4 @@
 - Preserved active creative-flight input while held.
 - Preserved vanilla creative-flight drift while disabled.
 - Added exclusion gates for non-creative/non-flying movement, spectator, elytra/gliding, swimming, vehicles, recently-hurt knockback-adjacent movement, and unknown/server-correction-like velocity.
-- Kept the artifact private; no public upload or release has been approved.
+- Kept this alpha artifact internal; public release begins with `0.1.0-beta.1`.

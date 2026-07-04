@@ -12,11 +12,11 @@ Planned v1 behavior:
 - When enabled, creative flight inertia stops immediately after movement, jump, or sneak input is released.
 - When disabled, vanilla creative flight behavior remains unchanged.
 
-This repo now has a Fabric client scaffold with the `Toggle Please Stop` keybind, local persisted config, the creative-flight brake, exclusion gates, creative-only user-facing feedback, and private local test jars. the maintainer has tested the current behavior across worlds, so the project status is private beta candidate. Public upload is not approved.
+This repo now has a Fabric client scaffold with the `Toggle Please Stop` keybind, local persisted config, the creative-flight brake, exclusion gates, creative-only user-facing feedback, and beta jars. the maintainer has tested the current behavior across worlds, so the project status is public beta candidate.
 
-Private beta docs:
+Beta release docs:
 
-- [Private Beta Candidate](docs/release/PRIVATE_RELEASE_CANDIDATE.md)
+- [Beta Candidate](docs/release/PRIVATE_RELEASE_CANDIDATE.md)
 - [Changelog](docs/release/CHANGELOG.md)
 - [Known Limitations](docs/release/KNOWN_LIMITATIONS.md)
 

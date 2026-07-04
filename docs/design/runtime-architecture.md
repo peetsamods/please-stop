@@ -20,7 +20,7 @@ Please Stop is planned as a Fabric-first client mod. The first implementation sh
 | Config persistence | Client | Stores only local preference. |
 | Movement check | Client | Applies only to local creative flight behavior. |
 | Server authority | Server | Not changed by this mod. |
-| Release policy | the maintainer | Public upload requires explicit approval. |
+| Release policy | the maintainer | Public beta release is approved; broader release claims still require proof. |
 
 ## Data Flow
 
@@ -63,7 +63,7 @@ Please Stop is planned as a Fabric-first client mod. The first implementation sh
 - Toggle proof after implementation: config tests pass; keybind flips `enabled`; config persists after restart.
 - Toast proof after implementation: config tests pass; toast keybind flips `showToasts`; launch reminder shows only when creative and enabled by preference.
 - Gameplay proof after implementation: creative flight drift stops only when enabled and input is released.
-- Beta posture proof: the maintainer tests the private jars across worlds and confirms creative-only UI behavior and creative-flight braking work as expected.
+- Beta posture proof: the maintainer tests the beta jars across worlds and confirms creative-only UI behavior and creative-flight braking work as expected.
 - Phase 4 diagnostic proof: while enabled, log active creative-flight input preservation and residual creative drift clearance; while disabled, log vanilla creative drift observation.
 - Phase 5 exclusion proof: controller tests preserve velocity for survival/non-creative, spectator, elytra/gliding, vehicle, swimming, knockback-adjacent, and unknown/server-correction-like movement.
 
@@ -73,4 +73,4 @@ Please Stop is planned as a Fabric-first client mod. The first implementation sh
 - Multiplayer policy enforcement.
 - Anti-cheat bypass.
 - Broad compatibility matrix.
-- Public release upload.
+- Release work beyond the approved public beta lane.
