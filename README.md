@@ -11,6 +11,6 @@ Planned v1 behavior:
 - When enabled, creative flight inertia stops immediately after movement, jump, or sneak input is released.
 - When disabled, vanilla creative flight behavior remains unchanged.
 
-This repo is currently foundation-only. It has no build scaffold, no source code, no release artifact, and no public upload approval yet.
+This repo now has a minimal Fabric client scaffold that builds and live-loads for Minecraft `1.21.11`. It does not yet have the keybind, config, creative-flight brake, release artifact, or public upload approval.
 
 Start with [docs/BINDER.md](docs/BINDER.md).

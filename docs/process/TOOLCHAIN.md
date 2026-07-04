@@ -45,6 +45,7 @@ These values were verified from primary/current metadata on 2026-07-04. If a lat
 - Mojang `1.21.11` version JSON reports Java major version `21`.
 - Fabric game metadata lists `1.21.11` as stable.
 - Fabric loader metadata for `1.21.11` reports stable loader `0.19.3` and intermediary `1.21.11`.
+- The approved `Slabbed+Terrain Slabs` Modrinth test profile currently launches Fabric Loader `0.19.2`; `fabric.mod.json` therefore uses runtime minimum `>=0.19.2` while the build toolchain remains pinned to `0.19.3`.
 - Fabric API Maven metadata latest `1.21.11` artifact is `0.141.4+1.21.11`.
 - Fabric Loom Maven metadata release is `1.17.13`.
 - Fabric Yarn Maven metadata latest `1.21.11` artifact is `1.21.11+build.6`.
@@ -64,7 +65,7 @@ If sources disagree later, stop and report the conflict before implementation.
 ## Expected Proof After Scaffold
 
 - Build proof: `./gradlew build`
-- Load proof: launch a local client and confirm Minecraft reaches title screen with Please Stop installed.
+- Load proof: launch a local client and confirm Please Stop is listed and the client initializer runs without classloading errors.
 
 ## Side Boundaries
 

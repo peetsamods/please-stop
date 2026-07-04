@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "please_stop",
+  "version": "${version}",
+  "name": "Please Stop",
+  "description": "A tiny Fabric client mod that removes creative flight inertia on toggle.",
+  "authors": [
+    "Peetsa"
+  ],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.peetsamods.pleasestop.client.PleaseStopClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.2",
+    "minecraft": "1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
