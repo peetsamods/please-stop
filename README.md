@@ -8,10 +8,11 @@ Planned v1 behavior:
 - Display name: `Please Stop`.
 - Mod id: `please_stop`.
 - Keybind plus persistent local config.
+- Creative-only launch reminder toast with a keybind to disable toasts.
 - When enabled, creative flight inertia stops immediately after movement, jump, or sneak input is released.
 - When disabled, vanilla creative flight behavior remains unchanged.
 
-This repo now has a Fabric client scaffold with the `Toggle Please Stop` keybind, local persisted `enabled` config, the creative-flight brake, exclusion gates, and a private local release-candidate jar for Minecraft `1.21.11`. Public upload is not approved.
+This repo now has a Fabric client scaffold with the `Toggle Please Stop` keybind, local persisted config, the creative-flight brake, exclusion gates, creative-only user-facing feedback, and private local test jars. Public upload is not approved.
 
 Private candidate docs:
 

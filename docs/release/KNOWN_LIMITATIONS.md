@@ -8,3 +8,5 @@
 - Knockback proof is limited to the local recently-hurt gate; it is not proof of every external velocity source.
 - There is no config screen yet. The v1 surface is keybind plus `config/please_stop.json`.
 - The default state is disabled. the maintainer must intentionally toggle it on.
+- User-facing Please Stop toggle feedback and the launch reminder toast are creative-only.
+- Toast visibility is controlled by `showToasts` in `config/please_stop.json` and the `Toggle Please Stop Toasts` keybind.
