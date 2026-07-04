@@ -1,6 +1,11 @@
 {
   "key.category.please_stop.controls": "Please Stop",
   "key.please_stop.toggle": "Toggle Please Stop",
+  "key.please_stop.toggle_toasts": "Toggle Please Stop Toasts",
   "message.please_stop.enabled": "Please Stop: ON",
-  "message.please_stop.disabled": "Please Stop: OFF"
+  "message.please_stop.disabled": "Please Stop: OFF",
+  "message.please_stop.toasts_enabled": "Please Stop toasts: ON",
+  "message.please_stop.toasts_disabled": "Please Stop toasts: OFF",
+  "toast.please_stop.title": "Please Stop",
+  "toast.please_stop.body": "Toggle Please Stop with B, configurable in key binds."
 }

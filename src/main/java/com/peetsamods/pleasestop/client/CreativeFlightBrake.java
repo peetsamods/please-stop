@@ -1,7 +1,7 @@
 package com.peetsamods.pleasestop.client;
 
+import net.minecraft.client.input.Input;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.util.PlayerInput;
 import net.minecraft.util.math.Vec3d;
 
 final class CreativeFlightBrake {
@@ -14,7 +14,7 @@ final class CreativeFlightBrake {
             boolean swimming,
             boolean inVehicle,
             boolean recentlyHurt,
-            PlayerInput input,
+            Input input,
             Vec3d currentVelocity,
             boolean hadActiveFlightInputLastTick,
             boolean justEnabled
@@ -83,11 +83,11 @@ final class CreativeFlightBrake {
                 player.isCreative(),
                 player.getAbilities().flying,
                 player.isSpectator(),
-                player.isGliding(),
+                player.isFallFlying(),
                 player.isSwimming(),
                 player.hasVehicle(),
                 player.hurtTime > 0,
-                player.input.playerInput,
+                player.input,
                 player.getVelocity(),
                 hadActiveFlightInputLastTick,
                 justEnabled
@@ -112,7 +112,7 @@ final class CreativeFlightBrake {
             boolean enabled,
             boolean creative,
             boolean flying,
-            PlayerInput input,
+            Input input,
             Vec3d currentVelocity,
             boolean hadActiveFlightInputLastTick,
             boolean justEnabled
@@ -160,7 +160,7 @@ final class CreativeFlightBrake {
             boolean enabled,
             boolean creative,
             boolean flying,
-            PlayerInput input,
+            Input input,
             Vec3d currentVelocity,
             boolean hadActiveFlightInputLastTick,
             boolean justEnabled
@@ -181,13 +181,13 @@ final class CreativeFlightBrake {
         ));
     }
 
-    static boolean hasActiveFlightInput(PlayerInput input) {
-        PlayerInput playerInput = input == null ? PlayerInput.DEFAULT : input;
-        return playerInput.forward()
-                || playerInput.backward()
-                || playerInput.left()
-                || playerInput.right()
-                || playerInput.jump()
-                || playerInput.sneak();
+    static boolean hasActiveFlightInput(Input input) {
+        return input != null
+                && (input.pressingForward
+                || input.pressingBack
+                || input.pressingLeft
+                || input.pressingRight
+                || input.jumping
+                || input.sneaking);
     }
 }
