@@ -1,5 +1,15 @@
 # Please Stop Changelog
 
+## 0.1.0-beta.1 - Private Beta Candidate
+
+- Graduated the private test posture from alpha to beta after the maintainer tested the jars across worlds and confirmed the behavior works.
+- Kept creative-only UI hardening: launch toasts, `Please Stop: ON/OFF`, and toast-toggle feedback do not appear in survival/non-creative worlds.
+- Kept the release boundary private; public upload remains unapproved.
+- Expected version labels for the next beta jars:
+  - `0.1.0-beta.1+1.21.11`
+  - `0.1.0-beta.1+1.21.1`
+  - `0.1.0-beta.1+26.2`
+
 ## Private test iteration - creative-only feedback and toast controls
 
 - Added the `Toggle Please Stop Toasts` keybind, defaulting to `N`.
