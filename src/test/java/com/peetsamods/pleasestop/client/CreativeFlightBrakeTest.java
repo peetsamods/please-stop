@@ -80,6 +80,15 @@ final class CreativeFlightBrakeTest {
     }
 
     @Test
+    void preservesVelocityForExcludedMovementStates() {
+        assertEquals(DRIFT, CreativeFlightBrake.brakedVelocity(state().spectator(true)));
+        assertEquals(DRIFT, CreativeFlightBrake.brakedVelocity(state().gliding(true)));
+        assertEquals(DRIFT, CreativeFlightBrake.brakedVelocity(state().swimming(true)));
+        assertEquals(DRIFT, CreativeFlightBrake.brakedVelocity(state().inVehicle(true)));
+        assertEquals(DRIFT, CreativeFlightBrake.brakedVelocity(state().recentlyHurt(true)));
+    }
+
+    @Test
     void preservesVelocityWhileMovementInputIsHeld() {
         assertEquals(DRIFT, CreativeFlightBrake.brakedVelocity(true, true, true, input(true, false, false, false, false, false), DRIFT, true, false));
         assertEquals(DRIFT, CreativeFlightBrake.brakedVelocity(true, true, true, input(false, true, false, false, false, false), DRIFT, true, false));
@@ -102,5 +111,22 @@ final class CreativeFlightBrakeTest {
             boolean sneak
     ) {
         return new PlayerInput(forward, backward, left, right, jump, sneak, false);
+    }
+
+    private static CreativeFlightBrake.State state() {
+        return new CreativeFlightBrake.State(
+                true,
+                true,
+                true,
+                false,
+                false,
+                false,
+                false,
+                false,
+                PlayerInput.DEFAULT,
+                DRIFT,
+                true,
+                false
+        );
     }
 }

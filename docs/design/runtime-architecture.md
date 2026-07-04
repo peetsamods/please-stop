@@ -32,9 +32,15 @@ Please Stop is planned as a Fabric-first client mod. The first implementation sh
    - player is in creative mode;
    - player is flying;
    - movement/up/down inputs are released.
-6. To avoid treating unrelated velocity as creative-flight inertia, the brake only acts after recent flight input release or immediately after the keybind has toggled the mod on.
-7. If all conditions are true, residual creative flight drift is cleared.
-8. If any condition is false, vanilla behavior continues.
+6. Before braking, the mod also excludes:
+   - spectator state;
+   - elytra/gliding state;
+   - swimming state;
+   - vehicle state;
+   - recently-hurt knockback-adjacent state.
+7. To avoid treating unrelated or server-correction-like velocity as creative-flight inertia, the brake only acts after recent flight input release or immediately after the keybind has toggled the mod on.
+8. If all conditions are true, residual creative flight drift is cleared.
+9. If any condition is false, vanilla behavior continues.
 
 ## Failure Modes
 
@@ -42,6 +48,7 @@ Please Stop is planned as a Fabric-first client mod. The first implementation sh
 - Config invalid or corrupt: fall back to `enabled=false` and do not crash the client.
 - Player absent or world not loaded: do nothing.
 - Not creative flying: do nothing.
+- Excluded movement state: do nothing.
 - Dedicated server classloading risk: avoid client-only classes outside client entrypoints, or document the jar as client-only.
 
 ## Proof Cases
@@ -51,7 +58,7 @@ Please Stop is planned as a Fabric-first client mod. The first implementation sh
 - Toggle proof after implementation: config tests pass; keybind flips `enabled`; config persists after restart.
 - Gameplay proof after implementation: creative flight drift stops only when enabled and input is released.
 - Phase 4 diagnostic proof: while enabled, log active creative-flight input preservation and residual creative drift clearance; while disabled, log vanilla creative drift observation.
-- Exclusion proof: survival, spectator, elytra, vehicle, swimming, and knockback-adjacent states are not intentionally changed.
+- Phase 5 exclusion proof: controller tests preserve velocity for survival/non-creative, spectator, elytra/gliding, vehicle, swimming, knockback-adjacent, and unknown/server-correction-like movement.
 
 ## Not In v1
 

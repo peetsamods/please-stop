@@ -5,6 +5,64 @@ import net.minecraft.util.PlayerInput;
 import net.minecraft.util.math.Vec3d;
 
 final class CreativeFlightBrake {
+    record State(
+            boolean enabled,
+            boolean creative,
+            boolean flying,
+            boolean spectator,
+            boolean gliding,
+            boolean swimming,
+            boolean inVehicle,
+            boolean recentlyHurt,
+            PlayerInput input,
+            Vec3d currentVelocity,
+            boolean hadActiveFlightInputLastTick,
+            boolean justEnabled
+    ) {
+        State spectator(boolean value) {
+            return with(value, gliding, swimming, inVehicle, recentlyHurt);
+        }
+
+        State gliding(boolean value) {
+            return with(spectator, value, swimming, inVehicle, recentlyHurt);
+        }
+
+        State swimming(boolean value) {
+            return with(spectator, gliding, value, inVehicle, recentlyHurt);
+        }
+
+        State inVehicle(boolean value) {
+            return with(spectator, gliding, swimming, value, recentlyHurt);
+        }
+
+        State recentlyHurt(boolean value) {
+            return with(spectator, gliding, swimming, inVehicle, value);
+        }
+
+        private State with(
+                boolean nextSpectator,
+                boolean nextGliding,
+                boolean nextSwimming,
+                boolean nextInVehicle,
+                boolean nextRecentlyHurt
+        ) {
+            return new State(
+                    enabled,
+                    creative,
+                    flying,
+                    nextSpectator,
+                    nextGliding,
+                    nextSwimming,
+                    nextInVehicle,
+                    nextRecentlyHurt,
+                    input,
+                    currentVelocity,
+                    hadActiveFlightInputLastTick,
+                    justEnabled
+            );
+        }
+    }
+
     enum Action {
         NONE,
         ACTIVE_FLIGHT_INPUT_OBSERVED,
@@ -20,22 +78,34 @@ final class CreativeFlightBrake {
             return Action.NONE;
         }
 
-        Vec3d currentVelocity = player.getVelocity();
-        Action action = action(
+        Action action = action(new State(
                 enabled,
                 player.isCreative(),
                 player.getAbilities().flying,
+                player.isSpectator(),
+                player.isGliding(),
+                player.isSwimming(),
+                player.hasVehicle(),
+                player.hurtTime > 0,
                 player.input.playerInput,
-                currentVelocity,
+                player.getVelocity(),
                 hadActiveFlightInputLastTick,
                 justEnabled
-        );
+        ));
 
         if (action == Action.BRAKE) {
             player.setVelocity(Vec3d.ZERO);
         }
 
         return action;
+    }
+
+    static Vec3d brakedVelocity(State state) {
+        if (action(state) == Action.BRAKE) {
+            return Vec3d.ZERO;
+        }
+
+        return state.currentVelocity();
     }
 
     static Vec3d brakedVelocity(
@@ -47,11 +117,43 @@ final class CreativeFlightBrake {
             boolean hadActiveFlightInputLastTick,
             boolean justEnabled
     ) {
-        if (action(enabled, creative, flying, input, currentVelocity, hadActiveFlightInputLastTick, justEnabled) == Action.BRAKE) {
-            return Vec3d.ZERO;
+        return brakedVelocity(new State(
+                enabled,
+                creative,
+                flying,
+                false,
+                false,
+                false,
+                false,
+                false,
+                input,
+                currentVelocity,
+                hadActiveFlightInputLastTick,
+                justEnabled
+        ));
+    }
+
+    static Action action(State state) {
+        if (!state.creative()
+                || !state.flying()
+                || state.spectator()
+                || state.gliding()
+                || state.swimming()
+                || state.inVehicle()
+                || state.recentlyHurt()
+                || state.currentVelocity().equals(Vec3d.ZERO)) {
+            return Action.NONE;
         }
 
-        return currentVelocity;
+        if (hasActiveFlightInput(state.input())) {
+            return state.enabled() ? Action.ACTIVE_FLIGHT_INPUT_OBSERVED : Action.NONE;
+        }
+
+        if (!state.hadActiveFlightInputLastTick() && !state.justEnabled()) {
+            return Action.NONE;
+        }
+
+        return state.enabled() ? Action.BRAKE : Action.VANILLA_DRIFT_OBSERVED;
     }
 
     static Action action(
@@ -63,19 +165,20 @@ final class CreativeFlightBrake {
             boolean hadActiveFlightInputLastTick,
             boolean justEnabled
     ) {
-        if (!creative || !flying || currentVelocity.equals(Vec3d.ZERO)) {
-            return Action.NONE;
-        }
-
-        if (hasActiveFlightInput(input)) {
-            return enabled ? Action.ACTIVE_FLIGHT_INPUT_OBSERVED : Action.NONE;
-        }
-
-        if (!hadActiveFlightInputLastTick && !justEnabled) {
-            return Action.NONE;
-        }
-
-        return enabled ? Action.BRAKE : Action.VANILLA_DRIFT_OBSERVED;
+        return action(new State(
+                enabled,
+                creative,
+                flying,
+                false,
+                false,
+                false,
+                false,
+                false,
+                input,
+                currentVelocity,
+                hadActiveFlightInputLastTick,
+                justEnabled
+        ));
     }
 
     static boolean hasActiveFlightInput(PlayerInput input) {
