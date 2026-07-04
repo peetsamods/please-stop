@@ -2,7 +2,7 @@
 
 - This is a Fabric client mod for Minecraft `1.21.11`.
 - Public upload is not approved.
-- The current private candidate is local proof only, not a Modrinth, CurseForge, or GitHub release.
+- The current private candidate has graduated to beta posture after the maintainer's cross-world testing, but it is still not a Modrinth, CurseForge, or GitHub release.
 - The mod is a client convenience. It does not create server authority and does not bypass server correction.
 - Multiplayer, anti-cheat behavior, and broad modpack compatibility are not claimed.
 - Knockback proof is limited to the local recently-hurt gate; it is not proof of every external velocity source.

@@ -63,6 +63,7 @@ Please Stop is planned as a Fabric-first client mod. The first implementation sh
 - Toggle proof after implementation: config tests pass; keybind flips `enabled`; config persists after restart.
 - Toast proof after implementation: config tests pass; toast keybind flips `showToasts`; launch reminder shows only when creative and enabled by preference.
 - Gameplay proof after implementation: creative flight drift stops only when enabled and input is released.
+- Beta posture proof: the maintainer tests the private jars across worlds and confirms creative-only UI behavior and creative-flight braking work as expected.
 - Phase 4 diagnostic proof: while enabled, log active creative-flight input preservation and residual creative drift clearance; while disabled, log vanilla creative drift observation.
 - Phase 5 exclusion proof: controller tests preserve velocity for survival/non-creative, spectator, elytra/gliding, vehicle, swimming, knockback-adjacent, and unknown/server-correction-like movement.
 
