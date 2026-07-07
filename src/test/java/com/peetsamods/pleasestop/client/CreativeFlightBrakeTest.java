@@ -102,6 +102,21 @@ final class CreativeFlightBrakeTest {
         assertEquals(DRIFT, CreativeFlightBrake.brakedVelocity(true, true, true, input(false, false, false, false, false, true), DRIFT, true, false));
     }
 
+    @Test
+    void stopsResidualDriftWhenJumpAndSneakAreHeldTogetherAfterMovementRelease() {
+        Vec3d result = CreativeFlightBrake.brakedVelocity(
+                true,
+                true,
+                true,
+                input(false, false, false, false, true, true),
+                DRIFT,
+                true,
+                false
+        );
+
+        assertEquals(Vec3d.ZERO, result);
+    }
+
     private static PlayerInput input(
             boolean forward,
             boolean backward,

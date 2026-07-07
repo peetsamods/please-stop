@@ -24,6 +24,7 @@
 - Added local persisted config at `config/please_stop.json`, defaulting to `enabled=false`.
 - Added actionbar feedback for `Please Stop: ON` and `Please Stop: OFF`.
 - Added the creative-flight brake for residual drift after movement, jump, or sneak input is released.
+- Fixed the remaining building case where holding jump and sneak together to stay level still allowed residual drift after movement input was released.
 - Preserved active creative-flight input while held.
 - Preserved vanilla creative-flight drift while disabled.
 - Added exclusion gates for non-creative/non-flying movement, spectator, elytra/gliding, swimming, vehicles, recently-hurt knockback-adjacent movement, and unknown/server-correction-like velocity.

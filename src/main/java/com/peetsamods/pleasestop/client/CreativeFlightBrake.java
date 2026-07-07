@@ -187,7 +187,6 @@ final class CreativeFlightBrake {
                 || playerInput.backward()
                 || playerInput.left()
                 || playerInput.right()
-                || playerInput.jump()
-                || playerInput.sneak();
+                || playerInput.jump() != playerInput.sneak();
     }
 }
