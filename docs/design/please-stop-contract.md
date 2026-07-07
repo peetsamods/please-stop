@@ -8,13 +8,15 @@ Please Stop exists to stop unwanted residual creative flight drift when the main
 
 - `Enabled`: the local persisted toggle is on.
 - `Creative flying`: the local player is in creative mode and currently flying.
-- `Residual drift`: continued motion after movement, jump, and sneak flight inputs are released.
-- `Active input`: the player is currently holding movement, jump, or sneak input.
+- `Residual drift`: continued motion after movement or net vertical flight input is released.
+- `Active input`: the player is currently holding movement input or a single vertical jump/sneak input.
+- `Vertical-neutral input`: the player is holding jump and sneak together to stay level while building; this does not count as active vertical flight input by itself.
 
 ## Allowed Behavior
 
 - When enabled and the local player is creative flying, residual drift may be stopped immediately after active flight inputs are released.
 - When active input is held, vanilla creative flight movement speed and direction should remain normal.
+- When jump and sneak are held together after movement input is released, horizontal residual drift may be stopped while the player stays level.
 - When disabled, vanilla creative flight behavior should remain unchanged.
 - The keybind may toggle the local enabled state.
 - The config may persist the enabled state locally.
@@ -48,6 +50,7 @@ Please Stop exists to stop unwanted residual creative flight drift when the main
 
 - Toggle off preserves vanilla creative flight drift.
 - Toggle on stops creative flight drift after input release.
+- Toggle on stops creative flight drift after horizontal input release even when jump and sneak are held together.
 - Active input still moves normally.
 - Excluded states show no intentional behavior change.
 

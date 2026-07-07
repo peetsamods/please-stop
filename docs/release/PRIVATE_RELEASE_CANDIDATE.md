@@ -19,9 +19,9 @@
 
 | Minecraft target | Version | SHA-256 | Staged path | Savepoint tag |
 | --- | --- | --- | --- | --- |
-| `1.21.11` | `0.1.0-beta.1+1.21.11` | `9b04574e1d60741c001a14875b6a74c281e1c70a43a09e237eeaae18d609eb60` | `<modrinth-profiles>/profiles/Slabbed+Terrain Slabs/mods/please-stop-0.1.0-beta.1+1.21.11.jar` | `please-stop-0.1.0-beta.1+1.21.11` |
-| `1.21.1` | `0.1.0-beta.1+1.21.1` | `83f92bd58c1498423e90d8bc835fcbe6d056a83db589da5d48da417bd353ffa4` | `<modrinth-profiles>/profiles/Slabbed 1.21.1/mods/please-stop-0.1.0-beta.1+1.21.1.jar` | `please-stop-0.1.0-beta.1+1.21.1` |
-| `26.2` | `0.1.0-beta.1+26.2` | `34a8df398ae04b393de48688130a8157c5a972be6f60bbf9a79aaf11eeaf5ee8` | `<modrinth-profiles>/profiles/SLABBED-MC 26.2/mods/please-stop-0.1.0-beta.1+26.2.jar` | `please-stop-0.1.0-beta.1+26.2` |
+| `1.21.11` | `0.1.0-beta.1+1.21.11` | `2f4e105bb6f5b89e9206337e24e9f0dd68116a2db836bf658bae0777cef21e96` | `<modrinth-profiles>/profiles/Slabbed+Terrain Slabs/mods/please-stop-0.1.0-beta.1+1.21.11.jar` | `please-stop-0.1.0-beta.1+1.21.11` |
+| `1.21.1` | `0.1.0-beta.1+1.21.1` | `20e691f3c1316cceab00080c6a6b7356907e30700b2df016f1b0666889237fc6` | `<modrinth-profiles>/profiles/Slabbed 1.21.1/mods/please-stop-0.1.0-beta.1+1.21.1.jar` | `please-stop-0.1.0-beta.1+1.21.1` |
+| `26.2` | `0.1.0-beta.1+26.2` | `9bc5c43a16fe696943c9dac882a0abdaf75ab66f6c760ff1031c946f035f7854` | `<modrinth-profiles>/profiles/SLABBED-MC 26.2/mods/please-stop-0.1.0-beta.1+26.2.jar` | `please-stop-0.1.0-beta.1+26.2` |
 
 ## Behavior Included
 
@@ -30,7 +30,7 @@
 - Config: local JSON booleans `enabled`, default `false`, and `showToasts`, default `true`.
 - User-facing toggle feedback is creative-only; pressing `Toggle Please Stop` outside creative mode does not toggle `enabled` and does not show `Please Stop: ON/OFF`.
 - Launch reminder toast is creative-only and can be disabled with the toast keybind.
-- Enabled behavior: residual creative flight drift is cleared after active movement/up/down flight input is released.
+- Enabled behavior: residual creative flight drift is cleared after active movement input is released and up/down flight input is released or held together as vertical-neutral.
 - Disabled behavior: vanilla creative flight drift remains.
 - Active held creative-flight input remains normal.
 - Exclusions: non-creative/non-flying movement, spectator, elytra/gliding, swimming, vehicles, recently-hurt knockback-adjacent movement, and unknown/server-correction-like velocity.

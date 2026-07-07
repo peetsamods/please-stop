@@ -35,7 +35,8 @@ Please Stop is planned as a Fabric-first client mod. The first implementation sh
    - config is enabled;
    - player is in creative mode;
    - player is flying;
-   - movement/up/down inputs are released.
+   - movement inputs are released;
+   - up/down inputs are either released or held together as vertical-neutral building input.
 8. Before braking, the mod also excludes:
    - spectator state;
    - elytra/gliding state;
@@ -44,7 +45,8 @@ Please Stop is planned as a Fabric-first client mod. The first implementation sh
    - recently-hurt knockback-adjacent state.
 9. To avoid treating unrelated or server-correction-like velocity as creative-flight inertia, the brake only acts after recent flight input release or immediately after the keybind has toggled the mod on.
 10. If all conditions are true, residual creative flight drift is cleared.
-11. If any condition is false, vanilla behavior continues.
+11. If jump and sneak are held together after horizontal movement is released, the brake may clear residual horizontal drift while preserving the player's vertical-neutral intent.
+12. If any condition is false, vanilla behavior continues.
 
 ## Failure Modes
 
