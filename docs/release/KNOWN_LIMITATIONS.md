@@ -1,6 +1,6 @@
 # Please Stop Known Limitations
 
-- This is a Fabric client mod for Minecraft `1.21.11`.
+- This is a Fabric client mod for Minecraft `1.21.1`, `1.21.11`, and `26.2`.
 - The current candidate has graduated to public beta posture after the maintainer's cross-world testing.
 - The mod is a client convenience. It does not create server authority and does not bypass server correction.
 - Multiplayer, anti-cheat behavior, and broad modpack compatibility are not claimed.
