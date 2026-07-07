@@ -187,7 +187,6 @@ final class CreativeFlightBrake {
                 || input.pressingBack
                 || input.pressingLeft
                 || input.pressingRight
-                || input.jumping
-                || input.sneaking);
+                || input.jumping != input.sneaking);
     }
 }
