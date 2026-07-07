@@ -11,7 +11,7 @@
 - License: MIT, recorded in `LICENSE` and declared in `fabric.mod.json`
 - Current archive name: `please-stop-0.1.0-beta.1+1.21.11.jar`
 - Current local build path: `build/libs/please-stop-0.1.0-beta.1+1.21.11.jar`
-- SHA-256: `9b04574e1d60741c001a14875b6a74c281e1c70a43a09e237eeaae18d609eb60`
+- SHA-256: `2f4e105bb6f5b89e9206337e24e9f0dd68116a2db836bf658bae0777cef21e96`
 - Approved smoke-test profile path: `<modrinth-profiles>/profiles/Slabbed+Terrain Slabs`
 - Approved staged path: `<modrinth-profiles>/profiles/Slabbed+Terrain Slabs/mods/please-stop-0.1.0-beta.1+1.21.11.jar`
 
@@ -58,7 +58,7 @@
 - Version posture: current public beta candidate is `0.1.0-beta.1+1.21.11`.
 - Jar contents: `fabric.mod.json`, `PleaseStopClient.class`, `CreativeFlightBrake.class`, `CreativeFlightBrake$State.class`, and `PleaseStopConfig.class` are present.
 - License proof: root `LICENSE` exists and `fabric.mod.json` declares `MIT`.
-- Current local beta jar hash: `9b04574e1d60741c001a14875b6a74c281e1c70a43a09e237eeaae18d609eb60`.
+- Current local beta jar hash: `2f4e105bb6f5b89e9206337e24e9f0dd68116a2db836bf658bae0777cef21e96`.
 - Smoke proof log: `/tmp/please-stop-phase6-rc-stopped-latest.log`.
 - Smoke screenshots: `/tmp/please-stop-phase6-rc-window.png` and `/tmp/please-stop-phase6-rc-toggle.png`.
 - Final profile config proof: `/tmp/please-stop-phase6-rc-final-config.json` contains `enabled=false`.
