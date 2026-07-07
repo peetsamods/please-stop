@@ -16,7 +16,7 @@ This repo now has a Fabric client scaffold with the `Toggle Please Stop` keybind
 
 Beta release docs:
 
-- [Beta Candidate](docs/release/PRIVATE_RELEASE_CANDIDATE.md)
+- [Beta Candidate](docs/release/PUBLIC_RELEASE_CANDIDATE.md)
 - [Changelog](docs/release/CHANGELOG.md)
 - [Known Limitations](docs/release/KNOWN_LIMITATIONS.md)
 
