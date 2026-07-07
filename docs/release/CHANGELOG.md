@@ -1,5 +1,14 @@
 # Please Stop Changelog
 
+## 0.1.0-beta.2 - Public Beta Candidate
+
+- Fixed the creative-building case where holding jump and sneak together to stay level could still leave horizontal creative-flight drift after movement input was released.
+- Rebuilt and staged all public beta artifacts with the beta.2 version line:
+  - `0.1.0-beta.2+1.21.11`
+  - `0.1.0-beta.2+1.21.1`
+  - `0.1.0-beta.2+26.2`
+- Preserved the existing creative-only UI hardening, toast toggle, local config, and movement exclusions from beta.1.
+
 ## 0.1.0-beta.1 - Public Beta Candidate
 
 - Graduated from private testing to public beta after the maintainer tested the jars across worlds and confirmed the behavior works.
