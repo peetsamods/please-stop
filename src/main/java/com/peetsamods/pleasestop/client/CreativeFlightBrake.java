@@ -9,6 +9,7 @@ final class CreativeFlightBrake {
             boolean enabled,
             boolean creative,
             boolean flying,
+            boolean onGround,
             boolean spectator,
             boolean gliding,
             boolean swimming,
@@ -50,6 +51,7 @@ final class CreativeFlightBrake {
                     enabled,
                     creative,
                     flying,
+                    onGround,
                     nextSpectator,
                     nextGliding,
                     nextSwimming,
@@ -82,6 +84,7 @@ final class CreativeFlightBrake {
                 enabled,
                 player.isCreative(),
                 player.getAbilities().flying,
+                player.onGround(),
                 player.isSpectator(),
                 player.isFallFlying(),
                 player.isSwimming(),
@@ -126,6 +129,7 @@ final class CreativeFlightBrake {
                 false,
                 false,
                 false,
+                false,
                 input,
                 currentVelocity,
                 hadActiveFlightInputLastTick,
@@ -145,7 +149,7 @@ final class CreativeFlightBrake {
             return Action.NONE;
         }
 
-        if (hasActiveFlightInput(state.input())) {
+        if (hasActiveFlightInput(state.input(), state.onGround())) {
             return state.enabled() ? Action.ACTIVE_FLIGHT_INPUT_OBSERVED : Action.NONE;
         }
 
@@ -174,6 +178,7 @@ final class CreativeFlightBrake {
                 false,
                 false,
                 false,
+                false,
                 input,
                 currentVelocity,
                 hadActiveFlightInputLastTick,
@@ -182,11 +187,19 @@ final class CreativeFlightBrake {
     }
 
     static boolean hasActiveFlightInput(Input input) {
+        return hasActiveFlightInput(input, false);
+    }
+
+    static boolean hasActiveFlightInput(Input input, boolean onGround) {
         Input playerInput = input == null ? Input.EMPTY : input;
+        boolean verticalInput = playerInput.jump() != playerInput.shift();
+        if (onGround && playerInput.shift() && !playerInput.jump()) {
+            verticalInput = false;
+        }
         return playerInput.forward()
                 || playerInput.backward()
                 || playerInput.left()
                 || playerInput.right()
-                || playerInput.jump() != playerInput.shift();
+                || verticalInput;
     }
 }
