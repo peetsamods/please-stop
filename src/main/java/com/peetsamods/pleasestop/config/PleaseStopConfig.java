@@ -18,25 +18,31 @@ public final class PleaseStopConfig {
 
     private boolean enabled;
     private boolean showToasts;
+    private CreativeFlightAssistMode creativeFlightAssistMode;
 
-    private PleaseStopConfig(boolean enabled, boolean showToasts) {
+    private PleaseStopConfig(boolean enabled, boolean showToasts, CreativeFlightAssistMode creativeFlightAssistMode) {
         this.enabled = enabled;
         this.showToasts = showToasts;
+        this.creativeFlightAssistMode = creativeFlightAssistMode;
     }
 
     public static PleaseStopConfig load(Path path) {
         if (!Files.exists(path)) {
-            return new PleaseStopConfig(false, true);
+            return defaults();
         }
 
         try (Reader reader = Files.newBufferedReader(path)) {
             JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
-            return new PleaseStopConfig(booleanOrDefault(json.get("enabled"), false), booleanOrDefault(json.get("showToasts"), true));
+            return new PleaseStopConfig(
+                    booleanOrDefault(json.get("enabled"), false),
+                    booleanOrDefault(json.get("showToasts"), true),
+                    creativeFlightAssistModeOrDefault(json.get("creativeFlightAssistMode"))
+            );
         } catch (IOException | RuntimeException ignored) {
             // Safe fallback: a bad local preference must never stop the client from loading.
         }
 
-        return new PleaseStopConfig(false, true);
+        return defaults();
     }
 
     public static PleaseStopConfig loadOrCreate(Path path) throws IOException {
@@ -51,6 +57,24 @@ public final class PleaseStopConfig {
 
     public boolean showToasts() {
         return showToasts;
+    }
+
+    public CreativeFlightAssistMode creativeFlightAssistMode() {
+        return creativeFlightAssistMode;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setShowToasts(boolean showToasts) {
+        this.showToasts = showToasts;
+    }
+
+    public void setCreativeFlightAssistMode(CreativeFlightAssistMode creativeFlightAssistMode) {
+        this.creativeFlightAssistMode = creativeFlightAssistMode == null
+                ? CreativeFlightAssistMode.PERSISTENT_AFTER_ACTIVATION
+                : creativeFlightAssistMode;
     }
 
     public boolean toggle() {
@@ -72,6 +96,7 @@ public final class PleaseStopConfig {
         JsonObject json = new JsonObject();
         json.addProperty("enabled", enabled);
         json.addProperty("showToasts", showToasts);
+        json.addProperty("creativeFlightAssistMode", creativeFlightAssistMode.name());
 
         try (Writer writer = Files.newBufferedWriter(path)) {
             GSON.toJson(json, writer);
@@ -87,5 +112,24 @@ public final class PleaseStopConfig {
         }
 
         return defaultValue;
+    }
+
+    private static PleaseStopConfig defaults() {
+        return new PleaseStopConfig(false, true, CreativeFlightAssistMode.PERSISTENT_AFTER_ACTIVATION);
+    }
+
+    private static CreativeFlightAssistMode creativeFlightAssistModeOrDefault(JsonElement element) {
+        if (element != null && element.isJsonPrimitive()) {
+            JsonPrimitive primitive = element.getAsJsonPrimitive();
+            if (primitive.isString()) {
+                try {
+                    return CreativeFlightAssistMode.valueOf(primitive.getAsString());
+                } catch (IllegalArgumentException ignored) {
+                    // A later or malformed value must remain a safe local preference failure.
+                }
+            }
+        }
+
+        return CreativeFlightAssistMode.PERSISTENT_AFTER_ACTIVATION;
     }
 }

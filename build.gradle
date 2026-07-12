@@ -2,6 +2,12 @@ plugins {
     id 'fabric-loom' version "${loom_version}"
 }
 
+fabricApi {
+    configureTests {
+        createSourceSet = true
+    }
+}
+
 version = project.mod_version
 group = project.maven_group
 

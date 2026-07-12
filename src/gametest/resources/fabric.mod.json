@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "please_stop_gametest",
+  "version": "1.0.0",
+  "name": "Please Stop Client Proof",
+  "environment": "client",
+  "entrypoints": {
+    "fabric-client-gametest": [
+      "com.peetsamods.pleasestop.client.PleaseStopBeta3ClientGameTest"
+    ]
+  },
+  "depends": {
+    "fabricloader": "*",
+    "minecraft": "1.21.11",
+    "fabric-api": "*",
+    "please_stop": "*"
+  }
+}

@@ -1,6 +1,7 @@
 package com.peetsamods.pleasestop.config;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Files;
@@ -20,6 +21,7 @@ final class PleaseStopConfigTest {
 
         assertFalse(config.isEnabled());
         assertTrue(config.showToasts());
+        assertEquals(CreativeFlightAssistMode.PERSISTENT_AFTER_ACTIVATION, config.creativeFlightAssistMode());
     }
 
     @Test
@@ -32,6 +34,7 @@ final class PleaseStopConfigTest {
         assertTrue(config.showToasts());
         assertTrue(Files.readString(configPath).contains("\"enabled\": false"));
         assertTrue(Files.readString(configPath).contains("\"showToasts\": true"));
+        assertTrue(Files.readString(configPath).contains("\"creativeFlightAssistMode\": \"PERSISTENT_AFTER_ACTIVATION\""));
     }
 
     @Test
@@ -89,5 +92,25 @@ final class PleaseStopConfigTest {
 
         assertTrue(PleaseStopConfig.load(configPath).isEnabled());
         assertFalse(PleaseStopConfig.load(configPath).showToasts());
+    }
+
+    @Test
+    void loadsCreativeFlightAssistModeFromJson() throws Exception {
+        Path configPath = tempDir.resolve("please_stop.json");
+        Files.writeString(configPath, "{ \"creativeFlightAssistMode\": \"ALWAYS_ON_IN_CREATIVE\" }");
+
+        PleaseStopConfig config = PleaseStopConfig.load(configPath);
+
+        assertEquals(CreativeFlightAssistMode.ALWAYS_ON_IN_CREATIVE, config.creativeFlightAssistMode());
+    }
+
+    @Test
+    void invalidCreativeFlightAssistModeFallsBackToPersistentMode() throws Exception {
+        Path configPath = tempDir.resolve("please_stop.json");
+        Files.writeString(configPath, "{ \"creativeFlightAssistMode\": \"not_a_mode\" }");
+
+        PleaseStopConfig config = PleaseStopConfig.load(configPath);
+
+        assertEquals(CreativeFlightAssistMode.PERSISTENT_AFTER_ACTIVATION, config.creativeFlightAssistMode());
     }
 }

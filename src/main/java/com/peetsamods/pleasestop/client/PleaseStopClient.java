@@ -22,12 +22,17 @@ public final class PleaseStopClient implements ClientModInitializer {
     public static final String MOD_ID = "please_stop";
     private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     private static final KeyBinding.Category CATEGORY = KeyBinding.Category.create(Identifier.of(MOD_ID, "controls"));
+    private static PleaseStopConfig activeConfig;
+    private static int suppressedSneakViewBobCount;
 
     private PleaseStopConfig config;
     private Path configPath;
     private KeyBinding toggleKeyBinding;
     private KeyBinding toggleToastsKeyBinding;
+    private KeyBinding toggleFlightAssistKeyBinding;
+    private KeyBinding openSettingsKeyBinding;
     private final LaunchToastGate launchToastGate = new LaunchToastGate();
+    private final CreativeFlightAssist creativeFlightAssist = new CreativeFlightAssist();
     private boolean loggedActiveInput;
     private boolean loggedDisabledDrift;
     private boolean hadActiveFlightInputLastTick;
@@ -37,6 +42,7 @@ public final class PleaseStopClient implements ClientModInitializer {
     public void onInitializeClient() {
         configPath = FabricLoader.getInstance().getConfigDir().resolve(PleaseStopConfig.FILE_NAME);
         config = loadConfig(configPath);
+        activeConfig = config;
         toggleKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.please_stop.toggle",
                 InputUtil.Type.KEYSYM,
@@ -49,9 +55,47 @@ public final class PleaseStopClient implements ClientModInitializer {
                 GLFW.GLFW_KEY_N,
                 CATEGORY
         ));
+        toggleFlightAssistKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.please_stop.toggle_flight_assist",
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_V,
+                CATEGORY
+        ));
+        openSettingsKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.please_stop.open_settings",
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_M,
+                CATEGORY
+        ));
 
         ClientTickEvents.END_CLIENT_TICK.register(this::onEndClientTick);
         LOGGER.info("Please Stop client loaded. enabled={}", config.isEnabled());
+    }
+
+    public static boolean shouldStabilizeSneakCamera(net.minecraft.client.network.ClientPlayerEntity player) {
+        return activeConfig != null
+                && player != null
+                && player.input != null
+                && !player.isSpectator()
+                && !player.isGliding()
+                && !player.isSwimming()
+                && !player.hasVehicle()
+                && player.hurtTime <= 0
+                && CreativeSneakCamera.shouldStabilize(
+                activeConfig.isEnabled(),
+                player.isCreative(),
+                player.getAbilities().flying,
+                player.isOnGround(),
+                player.input.playerInput.sneak()
+        );
+    }
+
+    public static void recordSuppressedSneakViewBob() {
+        suppressedSneakViewBobCount++;
+    }
+
+    public static int suppressedSneakViewBobCount() {
+        return suppressedSneakViewBobCount;
     }
 
     private PleaseStopConfig loadConfig(Path path) {
@@ -92,6 +136,32 @@ public final class PleaseStopClient implements ClientModInitializer {
             saveConfig();
             sendToastToggleFeedback(client, showToasts);
             LOGGER.info("Please Stop launch toasts toggled {}.", showToasts ? "on" : "off");
+        }
+
+        while (toggleFlightAssistKeyBinding.wasPressed()) {
+            CreativeFlightAssist.Action action = creativeFlightAssist.toggle(
+                    client.player,
+                    config.isEnabled(),
+                    client.interactionManager != null && client.interactionManager.isFlyingLocked()
+            );
+            if (action == CreativeFlightAssist.Action.ACTIVATE || action == CreativeFlightAssist.Action.DEACTIVATE) {
+                sendFlightAssistFeedback(client, action == CreativeFlightAssist.Action.ACTIVATE);
+                LOGGER.info("Please Stop Creative Flight Assist {}.", action == CreativeFlightAssist.Action.ACTIVATE ? "activated" : "deactivated");
+            }
+        }
+
+        while (openSettingsKeyBinding.wasPressed()) {
+            client.setScreen(new PleaseStopSettingsScreen(client.currentScreen, config, this::saveConfig));
+        }
+
+        CreativeFlightAssist.Action flightAssistAction = creativeFlightAssist.tick(
+                client.player,
+                config.isEnabled(),
+                config.creativeFlightAssistMode(),
+                client.interactionManager != null && client.interactionManager.isFlyingLocked()
+        );
+        if (flightAssistAction == CreativeFlightAssist.Action.REACTIVATE) {
+            LOGGER.info("Please Stop Creative Flight Assist restored Creative flight at ground level.");
         }
 
         CreativeFlightBrake.Action action = CreativeFlightBrake.apply(
@@ -196,6 +266,14 @@ public final class PleaseStopClient implements ClientModInitializer {
             client.player.sendMessage(Text.translatable(showToasts
                     ? "message.please_stop.toasts_enabled"
                     : "message.please_stop.toasts_disabled"), true);
+        }
+    }
+
+    private void sendFlightAssistFeedback(MinecraftClient client, boolean active) {
+        if (allowsUserFacingControls(client)) {
+            client.player.sendMessage(Text.translatable(active
+                    ? "message.please_stop.flight_assist_enabled"
+                    : "message.please_stop.flight_assist_disabled"), true);
         }
     }
 
