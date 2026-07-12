@@ -1,5 +1,16 @@
 # Please Stop Changelog
 
+## 0.1.0-beta.3 - Local TEST Candidate, Not Published
+
+- Added a native Please Stop Settings screen, opened with `M` by default, for the local enablement, launch-toast, and Creative Flight Assist preferences.
+- Added explanatory tooltips, including a clear distinction between `Off (vanilla)` Flight Assist and the Please Stop master switch.
+- Added `Toggle Creative Flight Assist`, default `V`, which uses Minecraft's normal Creative ability update rather than a local-only flight shortcut.
+- Added configurable Flight Assist modes: Off (vanilla), Persistent after activation, and Always on in Creative.
+- Made ground-level Flight Assist and no-inertia braking work while Sneak remains held, without changing airborne Sneak descent.
+- Removed both Minecraft's crouch camera dip and its separate view-bobbing transform while Sneak is held during enabled ground-level Creative flight.
+- Built and source-tested local beta.3 candidates for `1.21.11`, `1.21.1`, and `26.2`.
+- Staged the matching local profile jars with explicit `-TEST.jar` filenames; did not upload or publish the beta.3 candidate.
+
 ## 0.1.0-beta.2 - Public Beta Candidate
 
 - Fixed the creative-building case where holding jump and sneak together to stay level could still leave horizontal creative-flight drift after movement input was released.

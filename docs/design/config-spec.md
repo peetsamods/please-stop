@@ -10,6 +10,17 @@ This file defines the planned v1 config surface. It must stay consistent with [p
 | --- | --- | --- | --- | --- |
 | `enabled` | boolean | `false` | local client | Whether Please Stop removes creative flight drift when the contract conditions are met. |
 | `showToasts` | boolean | `true` | local client | Whether Please Stop may show the creative-only launch reminder toast. |
+| `creativeFlightAssistMode` | enum | `PERSISTENT_AFTER_ACTIVATION` | local client | How Creative Flight Assist makes no-inertia flight available at ground level. |
+
+## Creative Flight Assist Modes
+
+Flight Assist controls only automatic Creative-flight activation/restoration. Choosing `VANILLA` keeps Please Stop's inertia braking and Sneak camera stabilization enabled; turning the Please Stop master switch off disables every feature.
+
+| Mode | Meaning |
+| --- | --- |
+| `VANILLA` | Please Stop does not activate or restore Creative flight. |
+| `PERSISTENT_AFTER_ACTIVATION` | Once Creative flight has been activated, Flight Assist restores it when the player returns to ground level. This is the default. |
+| `ALWAYS_ON_IN_CREATIVE` | Flight Assist activates Creative flight whenever the local player is safely eligible, without double-Space. |
 
 ## Keybind
 
@@ -26,6 +37,21 @@ This file defines the planned v1 config surface. It must stay consistent with [p
 - Action: invert `showToasts`
 - Persistence: save the new value to the local config
 - Feedback: in creative mode, local actionbar text shows `Please Stop toasts: ON` or `Please Stop toasts: OFF`
+
+## Flight Assist Keybind
+
+- Name: `Toggle Creative Flight Assist`
+- Default key: `V`
+- Action: activate or deactivate the current session's Flight Assist using Minecraft's normal Creative ability update.
+- Master gate: no-op while `enabled=false`, so Flight Assist never creates a flight state without Please Stop's no-inertia brake.
+- Safety: no-op unless the local player is an eligible Creative player with flight permission; it respects spectator, gliding, swimming, vehicles, recent damage, and a flight lock.
+
+## Settings Screen
+
+- Name: `Please Stop Settings`
+- Default key: `M` (`O` conflicted in the tested 26.2 profile).
+- Controls: Please Stop enablement, Creative Flight Assist mode, and launch reminder toast preference, each with an explanatory tooltip.
+- Key rebinds: available through the screen's `Key Bindings...` button and Minecraft's standard Controls screen.
 
 ## Defaults
 
@@ -52,8 +78,6 @@ This file defines the planned v1 config surface. It must stay consistent with [p
 
 These are not v1 requirements:
 
-- HUD/status indicator.
 - Default-enabled preference.
 - Per-world or per-server profile.
 - Separate horizontal/vertical brake settings.
-- Config screen.

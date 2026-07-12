@@ -8,11 +8,14 @@ Planned v1 behavior:
 - Display name: `Please Stop`.
 - Mod id: `please_stop`.
 - Keybind plus persistent local config.
+- Native settings screen (`M`) with explanatory tooltips and a configurable Creative Flight Assist mode.
+- Creative Flight Assist (`V`) can keep no-inertia Creative flight available at ground level after activation, or start it automatically in Creative if configured.
+- Ground-level Sneak keeps the assisted camera steady instead of applying Minecraft's crouch dip/bob.
 - Creative-only launch reminder toast with a keybind to disable toasts.
 - When enabled, creative flight inertia stops immediately after movement, jump, or sneak input is released.
 - When disabled, vanilla creative flight behavior remains unchanged.
 
-This repo now has a Fabric client scaffold with the `Toggle Please Stop` keybind, local persisted config, the creative-flight brake, exclusion gates, creative-only user-facing feedback, and beta jars. the maintainer has tested the current behavior across worlds, so the project status is public beta candidate.
+This repo now has a Fabric client scaffold with the `Toggle Please Stop` keybind, local persisted config, the creative-flight brake, exclusion gates, creative-only user-facing feedback, and public beta.2 jars. Beta.3 adds Creative Flight Assist and settings; all three supported versions build, pass source tests, and are staged locally as `TEST` jars, but none is published yet.
 
 Beta release docs:
 
