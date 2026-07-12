@@ -117,6 +117,14 @@ final class CreativeFlightBrakeTest {
         assertEquals(Vec3.ZERO, result);
     }
 
+    @Test
+    void groundSneakDoesNotBlockNoInertiaBrake() {
+        Input sneakOnly = input(false, false, false, false, false, true);
+
+        assertEquals(false, CreativeFlightBrake.hasActiveFlightInput(sneakOnly, true));
+        assertEquals(true, CreativeFlightBrake.hasActiveFlightInput(sneakOnly, false));
+    }
+
     private static Input input(
             boolean forward,
             boolean backward,
@@ -133,6 +141,7 @@ final class CreativeFlightBrakeTest {
                 true,
                 true,
                 true,
+                false,
                 false,
                 false,
                 false,
