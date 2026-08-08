@@ -78,7 +78,7 @@ final class CreativeFlightAssistTest {
     }
 
     @Test
-    void vanillaDoubleSpaceReactivationClearsManualSuppression() {
+    void vanillaDoubleSpaceReactivationPreservesManualSuppression() {
         CreativeFlightAssist.Transition result = transition(
                 CreativeFlightAssistMode.PERSISTENT_AFTER_ACTIVATION,
                 CreativeFlightAssistMode.PERSISTENT_AFTER_ACTIVATION,
@@ -91,8 +91,8 @@ final class CreativeFlightAssistTest {
         );
 
         assertEquals(CreativeFlightAssist.Action.NONE, result.action());
-        assertTrue(result.assistActive());
-        assertFalse(result.manuallyDisabled());
+        assertFalse(result.assistActive());
+        assertTrue(result.manuallyDisabled());
     }
 
     @Test
@@ -114,7 +114,7 @@ final class CreativeFlightAssistTest {
     }
 
     @Test
-    void manualFlightAssistOffIsRespectedUntilFreshActivation() {
+    void manualFlightAssistOffIsRespectedUntilExplicitlyReenabled() {
         CreativeFlightAssist.Transition result = transition(
                 CreativeFlightAssistMode.ALWAYS_ON_IN_CREATIVE,
                 CreativeFlightAssistMode.ALWAYS_ON_IN_CREATIVE,

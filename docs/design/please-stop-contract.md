@@ -26,6 +26,7 @@ Please Stop exists to stop unwanted residual creative flight drift when the main
 - When Please Stop is enabled, Creative Flight Assist may use Minecraft's normal Creative ability update to activate or restore local Creative flight. It must only do this for an eligible Creative player who already has permission to fly.
 - In `Persistent after activation` mode, an activated Flight Assist may restore flight only when the player returns to ground level. In `Always on in Creative` mode, it may activate flight without double-Space.
 - The Flight Assist keybind may explicitly turn this per-session assistance on or off.
+- Once the player explicitly turns Flight Assist off, entering vanilla Creative flight must not silently turn it back on; that manual choice remains until explicit re-enablement, a mode change, or a master-switch session reset.
 - `VANILLA` Flight Assist mode disables only automatic flight activation/restoration; it does not disable Please Stop's inertia brake or eligible Sneak camera stabilization. The master switch disables all Please Stop behavior.
 
 ## Forbidden Behavior

@@ -1,6 +1,13 @@
 # Please Stop Changelog
 
-## 0.1.0-beta.3 - Local TEST Candidate, Not Published
+## 0.1.0-beta.4 - Local Release Candidate
+
+- Fixed Creative Flight Assist silently turning itself back on when the player entered vanilla Creative flight after explicitly turning Flight Assist OFF.
+- Kept mode changes and the Please Stop master-switch session reset as the intentional ways to clear that manual OFF choice.
+- Rebuilt and verified local Fabric candidates for `1.21.11`, `1.21.1`, and `26.2`.
+- Staged the three verified binary jars, checksum manifest, and player changelog in Ready Jars; kept live-profile installation, uploads, and publication outside this slice.
+
+## 0.1.0-beta.3 - Public Beta
 
 - Added a native Please Stop Settings screen, opened with `M` by default, for the local enablement, launch-toast, and Creative Flight Assist preferences.
 - Added explanatory tooltips, including a clear distinction between `Off (vanilla)` Flight Assist and the Please Stop master switch.
@@ -8,8 +15,8 @@
 - Added configurable Flight Assist modes: Off (vanilla), Persistent after activation, and Always on in Creative.
 - Made ground-level Flight Assist and no-inertia braking work while Sneak remains held, without changing airborne Sneak descent.
 - Removed both Minecraft's crouch camera dip and its separate view-bobbing transform while Sneak is held during enabled ground-level Creative flight.
-- Built and source-tested local beta.3 candidates for `1.21.11`, `1.21.1`, and `26.2`.
-- Staged the matching local profile jars with explicit `-TEST.jar` filenames; did not upload or publish the beta.3 candidate.
+- Built and source-tested beta.3 candidates for `1.21.11`, `1.21.1`, and `26.2`.
+- Published the matching beta.3 Fabric files for all three supported versions.
 
 ## 0.1.0-beta.2 - Public Beta Candidate
 

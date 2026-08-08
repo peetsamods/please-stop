@@ -1,6 +1,7 @@
 package com.peetsamods.pleasestop.client;
 
 import com.peetsamods.pleasestop.config.CreativeFlightAssistMode;
+import com.peetsamods.pleasestop.core.CreativeFlightAssistLogic;
 import net.minecraft.client.network.ClientPlayerEntity;
 
 /**
@@ -100,58 +101,37 @@ final class CreativeFlightAssist {
     }
 
     static Transition transition(State state) {
-        if (!state.eligible() || state.mode() == CreativeFlightAssistMode.VANILLA) {
-            return new Transition(Action.NONE, false, false);
-        }
-
-        boolean active = state.assistActive();
-        boolean suppressed = state.manuallyDisabled();
-
-        if (state.mode() != state.previousMode()) {
-            active = false;
-            suppressed = false;
-        }
-
-        if (state.flying() && !state.wasFlyingLastTick()) {
-            // Vanilla double-Space or the dedicated key is a fresh, explicit activation.
-            active = true;
-            suppressed = false;
-        } else if (state.flying() && !suppressed) {
-            active = true;
-        }
-
-        if (state.wasFlyingLastTick() && !state.flying() && !state.onGround()) {
-            // Leaving flight in mid-air is the normal vanilla signal that the player chose to stop flying.
-            active = false;
-        }
-
-        if (!suppressed
-                && state.mode() == CreativeFlightAssistMode.ALWAYS_ON_IN_CREATIVE
-                && !state.flying()) {
-            return new Transition(Action.REACTIVATE, true, false);
-        }
-
-        if (!suppressed
-                && state.mode() == CreativeFlightAssistMode.PERSISTENT_AFTER_ACTIVATION
-                && active
-                && state.onGround()
-                && !state.flying()) {
-            return new Transition(Action.REACTIVATE, true, false);
-        }
-
-        return new Transition(Action.NONE, active, suppressed);
+        CreativeFlightAssistLogic.Transition transition = CreativeFlightAssistLogic.transition(
+                new CreativeFlightAssistLogic.State(
+                        state.mode(),
+                        state.previousMode(),
+                        state.eligible(),
+                        state.onGround(),
+                        state.flying(),
+                        state.wasFlyingLastTick(),
+                        state.assistActive(),
+                        state.manuallyDisabled()
+                )
+        );
+        return new Transition(
+                Action.valueOf(transition.action().name()),
+                transition.assistActive(),
+                transition.manuallyDisabled()
+        );
     }
 
     static boolean isEligible(Eligibility eligibility) {
-        return eligibility.pleaseStopEnabled()
-                && eligibility.creative()
-                && eligibility.allowFlying()
-                && !eligibility.spectator()
-                && !eligibility.gliding()
-                && !eligibility.swimming()
-                && !eligibility.inVehicle()
-                && !eligibility.recentlyHurt()
-                && !eligibility.flyingLocked();
+        return CreativeFlightAssistLogic.isEligible(new CreativeFlightAssistLogic.Eligibility(
+                eligibility.pleaseStopEnabled(),
+                eligibility.creative(),
+                eligibility.allowFlying(),
+                eligibility.spectator(),
+                eligibility.gliding(),
+                eligibility.swimming(),
+                eligibility.inVehicle(),
+                eligibility.recentlyHurt(),
+                eligibility.flyingLocked()
+        ));
     }
 
     private static boolean isEligible(ClientPlayerEntity player, boolean pleaseStopEnabled, boolean flyingLocked) {

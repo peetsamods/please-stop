@@ -1,12 +1,12 @@
 package com.peetsamods.pleasestop.client;
 
-final class LaunchToastGate {
+public final class LaunchToastGate {
     private static final int REQUIRED_ELIGIBLE_TICKS = 20;
 
     private boolean shownForCurrentWorld;
     private int eligibleTicks;
 
-    boolean tick(boolean inWorld, boolean eligible) {
+    public boolean tick(boolean inWorld, boolean eligible) {
         if (!inWorld) {
             shownForCurrentWorld = false;
             eligibleTicks = 0;

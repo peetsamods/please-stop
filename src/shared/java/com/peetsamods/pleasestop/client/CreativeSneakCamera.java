@@ -1,10 +1,10 @@
 package com.peetsamods.pleasestop.client;
 
-final class CreativeSneakCamera {
+public final class CreativeSneakCamera {
     private CreativeSneakCamera() {
     }
 
-    static boolean shouldStabilize(
+    public static boolean shouldStabilize(
             boolean enabled,
             boolean creative,
             boolean flying,
