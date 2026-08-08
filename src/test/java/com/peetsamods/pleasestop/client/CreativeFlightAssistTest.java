@@ -32,15 +32,15 @@ final class CreativeFlightAssistTest {
     }
 
     @Test
-    void changingModeAndFreshVanillaActivationClearManualSuppression() {
+    void changingModeClearsButFreshVanillaActivationPreservesManualSuppression() {
         CreativeFlightAssist.Transition modeChange = transition(CreativeFlightAssistMode.ALWAYS_ON_IN_CREATIVE,
                 CreativeFlightAssistMode.PERSISTENT_AFTER_ACTIVATION, true, true, false, false, false, true);
         CreativeFlightAssist.Transition freshFlight = transition(CreativeFlightAssistMode.PERSISTENT_AFTER_ACTIVATION,
                 CreativeFlightAssistMode.PERSISTENT_AFTER_ACTIVATION, true, false, true, false, false, true);
         assertEquals(CreativeFlightAssist.Action.REACTIVATE, modeChange.action());
         assertFalse(modeChange.manuallyDisabled());
-        assertTrue(freshFlight.assistActive());
-        assertFalse(freshFlight.manuallyDisabled());
+        assertFalse(freshFlight.assistActive());
+        assertTrue(freshFlight.manuallyDisabled());
     }
 
     @Test
