@@ -68,10 +68,8 @@ final class CreativeFlightAssist {
             active = false;
             suppressed = false;
         }
-        if (state.flying() && !state.wasFlyingLastTick()) {
-            active = true;
-            suppressed = false;
-        } else if (state.flying() && !suppressed) {
+        if (state.flying() && !suppressed) {
+            // Vanilla flight entry must not undo an explicit Flight Assist OFF choice.
             active = true;
         }
         if (state.wasFlyingLastTick() && !state.flying() && !state.onGround()) active = false;
