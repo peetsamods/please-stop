@@ -1,5 +1,6 @@
 package com.peetsamods.pleasestop.config;
 
+/** Loader-neutral Creative Flight Assist preference. */
 public enum CreativeFlightAssistMode {
     VANILLA("option.please_stop.flight_assist.vanilla"),
     PERSISTENT_AFTER_ACTIVATION("option.please_stop.flight_assist.persistent"),

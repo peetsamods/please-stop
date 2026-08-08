@@ -12,6 +12,7 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/** Loader-neutral persisted Please Stop preferences. */
 public final class PleaseStopConfig {
     public static final String FILE_NAME = "please_stop.json";
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();

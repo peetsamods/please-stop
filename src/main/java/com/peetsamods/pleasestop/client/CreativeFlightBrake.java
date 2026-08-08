@@ -1,5 +1,6 @@
 package com.peetsamods.pleasestop.client;
 
+import com.peetsamods.pleasestop.core.CreativeFlightBrakeLogic;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.PlayerInput;
 import net.minecraft.util.math.Vec3d;
@@ -138,26 +139,24 @@ final class CreativeFlightBrake {
     }
 
     static Action action(State state) {
-        if (!state.creative()
-                || !state.flying()
-                || state.spectator()
-                || state.gliding()
-                || state.swimming()
-                || state.inVehicle()
-                || state.recentlyHurt()
-                || state.currentVelocity().equals(Vec3d.ZERO)) {
-            return Action.NONE;
-        }
-
-        if (hasActiveFlightInput(state.input(), state.onGround())) {
-            return state.enabled() ? Action.ACTIVE_FLIGHT_INPUT_OBSERVED : Action.NONE;
-        }
-
-        if (!state.hadActiveFlightInputLastTick() && !state.justEnabled()) {
-            return Action.NONE;
-        }
-
-        return state.enabled() ? Action.BRAKE : Action.VANILLA_DRIFT_OBSERVED;
+        CreativeFlightBrakeLogic.Action action = CreativeFlightBrakeLogic.action(
+                new CreativeFlightBrakeLogic.State(
+                        state.enabled(),
+                        state.creative(),
+                        state.flying(),
+                        state.onGround(),
+                        state.spectator(),
+                        state.gliding(),
+                        state.swimming(),
+                        state.inVehicle(),
+                        state.recentlyHurt(),
+                        input(state.input()),
+                        state.currentVelocity().equals(Vec3d.ZERO),
+                        state.hadActiveFlightInputLastTick(),
+                        state.justEnabled()
+                )
+        );
+        return Action.valueOf(action.name());
     }
 
     static Action action(
@@ -191,15 +190,18 @@ final class CreativeFlightBrake {
     }
 
     static boolean hasActiveFlightInput(PlayerInput input, boolean onGround) {
-        PlayerInput playerInput = input == null ? PlayerInput.DEFAULT : input;
-        boolean verticalInput = playerInput.jump() != playerInput.sneak();
-        if (onGround && playerInput.sneak() && !playerInput.jump()) {
-            verticalInput = false;
-        }
-        return playerInput.forward()
-                || playerInput.backward()
-                || playerInput.left()
-                || playerInput.right()
-                || verticalInput;
+        return CreativeFlightBrakeLogic.hasActiveFlightInput(input(input), onGround);
+    }
+
+    private static CreativeFlightBrakeLogic.Input input(PlayerInput input) {
+        PlayerInput actual = input == null ? PlayerInput.DEFAULT : input;
+        return new CreativeFlightBrakeLogic.Input(
+                actual.forward(),
+                actual.backward(),
+                actual.left(),
+                actual.right(),
+                actual.jump(),
+                actual.sneak()
+        );
     }
 }

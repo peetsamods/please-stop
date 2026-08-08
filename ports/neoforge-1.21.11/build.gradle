@@ -1,0 +1,82 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.141'
+}
+
+version = project.mod_version
+group = project.mod_group_id
+
+base {
+    archivesName = 'please-stop'
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    withSourcesJar()
+}
+
+sourceSets {
+    main {
+        java.srcDirs rootProject.file('../neoforge-1.21.1/src/main/java'), 'src/main/java'
+        resources.srcDirs rootProject.file('../neoforge-1.21.1/src/main/resources'), 'src/main/resources'
+    }
+    main.java.srcDir rootProject.file('../../src/shared/java')
+    test.java.srcDir rootProject.file('../../src/sharedTest/java')
+    test.java.srcDir rootProject.file('../neoforge-1.21.1/src/test/java')
+}
+
+neoForge {
+    version = project.neo_version
+
+    runs {
+        client {
+            client()
+        }
+        server {
+            server()
+            programArgument '--nogui'
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+dependencies {
+    testImplementation 'com.google.code.gson:gson:2.13.2'
+    testImplementation 'org.ow2.asm:asm:9.8'
+    testImplementation "org.junit.jupiter:junit-jupiter:${project.junit_version}"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:${project.junit_version}"
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    def values = [
+            minecraft_version: project.minecraft_version,
+            minecraft_version_range: project.minecraft_version_range,
+            neo_version: project.neo_version,
+            loader_version_range: project.loader_version_range,
+            mod_id: project.mod_id,
+            mod_name: project.mod_name,
+            mod_license: project.mod_license,
+            mod_version: project.mod_version
+    ]
+    inputs.properties values
+    filesMatching('META-INF/neoforge.mods.toml') {
+        expand values
+    }
+    from(rootProject.file('../../src/main/resources')) {
+        include 'assets/**'
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+
+tasks.named('test', Test).configure {
+    useJUnitPlatform()
+}

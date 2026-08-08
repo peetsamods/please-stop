@@ -42,6 +42,7 @@ public final class PleaseStopBeta3ClientGameTest implements FabricClientGameTest
                     + " sneakCameraStable=true"
                     + " sneakViewBobSuppressed=true"
                     + " manualOff=true"
+                    + " manualOffPersists=true"
                     + " masterOffNoOp=true"
                     + " survivalNoOp=true");
         }
@@ -140,6 +141,19 @@ public final class PleaseStopBeta3ClientGameTest implements FabricClientGameTest
         context.waitTicks(2);
         require(context.computeOnClient(client -> !client.player.getAbilities().flying),
                 "manual Flight Assist off was not respected");
+
+        context.runOnClient(client -> {
+            client.player.getAbilities().flying = true;
+            client.player.sendAbilitiesUpdate();
+        });
+        context.waitTicks(2);
+        context.runOnClient(client -> {
+            client.player.getAbilities().flying = false;
+            client.player.sendAbilitiesUpdate();
+        });
+        context.waitTicks(4);
+        require(context.computeOnClient(client -> !client.player.getAbilities().flying),
+                "manual Flight Assist off was lost after a later Creative-flight activation");
     }
 
     private static void proveMasterAndSurvivalNoOps(ClientGameTestContext context, TestSingleplayerContext singleplayer) {

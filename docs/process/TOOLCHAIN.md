@@ -86,3 +86,15 @@ Stop before coding if:
 - Java compatibility becomes unknown.
 - Mappings are unclear enough to risk wrong method/class names.
 - Client/server classloading boundaries are unclear.
+
+## Authorized Port Toolchains
+
+The Fabric pins above remain unchanged. The Forge/NeoForge port lane uses target-specific builds recorded in [PORTING_MAP.md](../porting/PORTING_MAP.md):
+
+| Target | Loader | Build plugin | Gradle | Java |
+| --- | --- | --- | --- | --- |
+| `1.21.1` | NeoForge `21.1.235` | ModDevGradle `2.0.141` | `9.2.1` | `21` |
+| `1.21.11` | NeoForge `21.11.42` | ModDevGradle `2.0.141` | `9.2.1` | `21` |
+| `1.20.1` | Forge `47.4.20` | ForgeGradle `6.0.54` | `8.8` | `17` |
+
+Version evidence was refreshed from the official NeoForge Maven metadata/MDK and the official Forge downloads/MDK on 2026-07-12. Recheck those primary sources before intentionally upgrading a pin.

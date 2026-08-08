@@ -1,0 +1,54 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.141'
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+neoForge {
+    version = project.neo_version
+
+    runs {
+        client {
+            client()
+            if (providers.gradleProperty('quickPlayWorld').isPresent()) {
+                programArguments.addAll '--quickPlaySingleplayer', providers.gradleProperty('quickPlayWorld').get()
+            }
+        }
+    }
+}
+
+configurations {
+    localRuntime
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+dependencies {
+    localRuntime files(project.production_jar)
+}
+
+tasks.register('verifyProductionJar') {
+    inputs.file project.production_jar
+    doLast {
+        def jar = file(project.production_jar)
+        if (!jar.isFile()) {
+            throw new GradleException("Production jar is missing: ${jar}")
+        }
+
+        def actualHash = java.security.MessageDigest
+                .getInstance('SHA-256')
+                .digest(jar.bytes)
+                .encodeHex()
+                .toString()
+        if (actualHash != project.expected_production_jar_sha256) {
+            throw new GradleException("Production jar hash drift: expected ${project.expected_production_jar_sha256}, got ${actualHash}")
+        }
+
+        println "productionJar=${jar}"
+        println "productionJarSha256=${actualHash}"
+    }
+}
+
+tasks.named('runClient').configure {
+    dependsOn tasks.named('verifyProductionJar')
+}
