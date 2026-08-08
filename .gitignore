@@ -5,3 +5,15 @@ run-*/
 *.log
 *.hprof
 .DS_Store
+
+# ── NEVER TRACK (see CLAUDE.md ⛔) ──
+_mcsrc_extract/
+_mcsrc_yarn/
+_mcsrc*/
+docs/binder/
+run-headless/
+tmp/
+*.7z
+*.zip
+compile-info.log
+.codex/
