@@ -32,7 +32,7 @@ final class NeoForgeBinaryCompatibilityTest {
     @Test
     void bootstrapDoesNotDirectlyLinkTheVersionSpecificDistField() throws IOException {
         List<String> directDistFieldReads = new ArrayList<>();
-        readClass("com/juliacoded/pleasestop/neoforge/PleaseStopNeoForge.class", new ClassVisitor(Opcodes.ASM9) {
+        readClass("com/peetsamods/pleasestop/neoforge/PleaseStopNeoForge.class", new ClassVisitor(Opcodes.ASM9) {
             @Override
             public MethodVisitor visitMethod(
                     int access,
@@ -65,7 +65,7 @@ final class NeoForgeBinaryCompatibilityTest {
     @Test
     void clientDoesNotDirectlyLinkVersionSpecificInputKeyOrToastApis() throws IOException {
         List<String> directLinks = new ArrayList<>();
-        readClass("com/juliacoded/pleasestop/neoforge/PleaseStopNeoForgeClient.class", new ClassVisitor(Opcodes.ASM9) {
+        readClass("com/peetsamods/pleasestop/neoforge/PleaseStopNeoForgeClient.class", new ClassVisitor(Opcodes.ASM9) {
             @Override
             public MethodVisitor visitMethod(
                     int access,
@@ -114,7 +114,7 @@ final class NeoForgeBinaryCompatibilityTest {
     @Test
     void groundFlightMixinCarriesOptionalHooksForBothRuntimeCallSites() throws IOException {
         List<RedirectTarget> redirects = new ArrayList<>();
-        readClass("com/juliacoded/pleasestop/neoforge/mixin/LocalPlayerMixin.class", new ClassVisitor(Opcodes.ASM9) {
+        readClass("com/peetsamods/pleasestop/neoforge/mixin/LocalPlayerMixin.class", new ClassVisitor(Opcodes.ASM9) {
             @Override
             public MethodVisitor visitMethod(
                     int access,
