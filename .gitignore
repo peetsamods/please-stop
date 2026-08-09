@@ -1,7 +1,19 @@
-.gradle/
-build/
-run/
-run-*/
-*.log
+
+# ── NEVER TRACK (see CLAUDE.md ⛔) ──
+*.7z
 *.hprof
+*.log
+*.zip
 .DS_Store
+.codex/
+.gradle/
+_mcsrc*/
+_mcsrc_extract/
+_mcsrc_yarn/
+build/
+compile-info.log
+docs/binder/
+run-*/
+run-headless/
+run/
+tmp/
