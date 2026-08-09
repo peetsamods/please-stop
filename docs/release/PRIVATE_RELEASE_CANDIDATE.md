@@ -29,8 +29,8 @@
 - `./gradlew clean test build`
 - Jar contains `fabric.mod.json`.
 - Repo contains root `LICENSE` matching the MIT metadata declaration.
-- Jar contains `com/juliacoded/pleasestop/client/PleaseStopClient.class`.
-- Jar contains `com/juliacoded/pleasestop/client/CreativeFlightBrake.class`.
+- Jar contains `com/peetsamods/pleasestop/client/PleaseStopClient.class`.
+- Jar contains `com/peetsamods/pleasestop/client/CreativeFlightBrake.class`.
 - Local jar hash matches staged jar hash.
 - Approved Modrinth profile loads Minecraft `1.21.11` with `please_stop`.
 - Approved top `New World` enters singleplayer.
