@@ -20,6 +20,7 @@ public final class CreativeFlightAssistLogic {
     public record State(
             CreativeFlightAssistMode mode,
             CreativeFlightAssistMode previousMode,
+            boolean pleaseStopEnabled,
             boolean eligible,
             boolean onGround,
             boolean flying,
@@ -53,7 +54,7 @@ public final class CreativeFlightAssistLogic {
     }
 
     public static Transition transition(State state) {
-        if (!state.eligible() || state.mode() == CreativeFlightAssistMode.VANILLA) {
+        if (!state.pleaseStopEnabled() || state.mode() == CreativeFlightAssistMode.VANILLA) {
             return new Transition(Action.NONE, false, false);
         }
 
@@ -63,6 +64,10 @@ public final class CreativeFlightAssistLogic {
         if (state.mode() != state.previousMode()) {
             active = false;
             suppressed = false;
+        }
+
+        if (!state.eligible()) {
+            return new Transition(Action.NONE, active, suppressed);
         }
 
         if (state.flying() && !suppressed) {

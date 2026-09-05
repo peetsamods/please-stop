@@ -2,11 +2,11 @@
 
 ## Status
 
-Phase 1 toolchain truth is pinned for the first Fabric scaffold.
+The checked-in Fabric and NeoForge toolchain values are pinned below.
 
 These values were verified from primary/current metadata on 2026-07-04. If a later phase upgrades any value, update this file before changing build files.
 
-## Planned Identity Values
+## Project Identity
 
 - Display name: `Please Stop`
 - Mod id: `please_stop`
@@ -65,7 +65,7 @@ Use the strongest available evidence:
 
 If sources disagree later, stop and report the conflict before implementation.
 
-## Expected Proof After Scaffold
+## Current Proof Commands
 
 - Build proof: `./gradlew build`
 - Load proof: launch a local client and confirm Please Stop is listed and the client initializer runs without classloading errors.
@@ -95,6 +95,5 @@ The Fabric pins above remain unchanged. The Forge/NeoForge port lane uses target
 | --- | --- | --- | --- | --- |
 | `1.21.1` | NeoForge `21.1.235` | ModDevGradle `2.0.141` | `9.2.1` | `21` |
 | `1.21.11` | NeoForge `21.11.42` | ModDevGradle `2.0.141` | `9.2.1` | `21` |
-| `1.20.1` | Forge `47.4.20` | ForgeGradle `6.0.54` | `8.8` | `17` |
 
 Version evidence was refreshed from the official NeoForge Maven metadata/MDK and the official Forge downloads/MDK on 2026-07-12. Recheck those primary sources before intentionally upgrading a pin.

@@ -31,10 +31,10 @@ Please Stop is planned as a Fabric-first client mod. The first implementation sh
 1. Client starts.
 2. Config loads `enabled` from Fabric's config dir, defaulting to `false` and creating `please_stop.json` if missing.
 3. Keybind registration exposes `Toggle Please Stop`.
-4. Pressing `Toggle Please Stop` flips `enabled`, saves immediately, logs the new state, and shows local actionbar feedback only when the local player is in creative mode.
-5. Pressing `Toggle Please Stop Toasts` flips `showToasts`, saves immediately, and shows local actionbar feedback only when the local player is in creative mode.
+4. Pressing `Toggle Please Stop` flips `enabled`, saves immediately, logs the new state, and shows local actionbar feedback only when the local player is currently in creative mode. The world's original/default game mode is not an additional gate.
+5. Pressing `Toggle Please Stop Toasts` flips `showToasts`, saves immediately, and shows local actionbar feedback under that same current-Creative gate.
 6. Pressing `Open Please Stop Settings` opens the native local settings screen; its `Key Bindings...` button uses Minecraft's standard Controls screen for rebinds.
-7. While Please Stop is enabled, `Toggle Creative Flight Assist` uses Minecraft's normal Creative ability update only for an eligible local Creative player. Persistent mode restores activated flight at ground level; Always On mode can activate it without double-Space. An explicit Flight Assist OFF choice survives later vanilla flight activation until explicit re-enablement or a mode/master reset. Disabling Please Stop resets the session assistance.
+7. While Please Stop is enabled, `Toggle Creative Flight Assist` uses Minecraft's normal Creative ability update only for an eligible local Creative player. Persistent mode restores activated flight at ground level; Always On mode can activate it without double-Space. An explicit Flight Assist OFF choice survives later vanilla flight activation and temporary exclusions until explicit re-enablement or a mode/master reset. Disabling Please Stop resets the session assistance.
 8. When a creative world/session first becomes eligible and `showToasts=true`, the client may show the launch reminder toast.
 9. During the narrow movement check, the mod verifies:
    - local player exists;
@@ -49,7 +49,7 @@ Please Stop is planned as a Fabric-first client mod. The first implementation sh
    - swimming state;
    - vehicle state;
    - recently-hurt knockback-adjacent state.
-11. To avoid treating unrelated or server-correction-like velocity as creative-flight inertia, the brake only acts after recent flight input release or immediately after the keybind has toggled the mod on.
+11. To avoid treating unrelated or server-correction-like velocity as creative-flight inertia, the brake only acts after recent flight input release or immediately after the keybind has toggled the mod on. Recent-input tracking uses the same ground/air interpretation as the brake decision.
 12. If all conditions are true, residual creative flight drift is cleared.
 13. If jump and sneak are held together after horizontal movement is released, the brake may clear residual horizontal drift while preserving the player's vertical-neutral intent.
 14. At ground level, Sneak alone is treated as neutral for horizontal braking so assisted flight remains no-inertia; in the air, Sneak remains active descent input.

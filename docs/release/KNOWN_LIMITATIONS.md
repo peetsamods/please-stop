@@ -1,12 +1,12 @@
 # Please Stop Known Limitations
 
-- This is a Fabric client mod for Minecraft `1.21.1`, `1.21.11`, and `26.2`.
-- The current candidate has graduated to public beta posture after the maintainer's cross-world testing.
+- Public builds cover Fabric `1.21.1`, `1.21.11`, and `26.2`, plus a NeoForge `1.21.x` line for `1.21.1` and `1.21.11`.
 - The mod is a client convenience. It does not create server authority and does not bypass server correction.
 - Multiplayer, anti-cheat behavior, and broad modpack compatibility are not claimed.
 - Knockback proof is limited to the local recently-hurt gate; it is not proof of every external velocity source.
-- Beta.3 is public and adds the small native settings screen and Creative Flight Assist. Beta.4 is the local correction candidate for preserving an explicit Flight Assist OFF choice across later vanilla flight entry; focused tests pass on all three versions and the deterministic `1.21.11` Creative client proof is green. Profile staging and publication remain pending.
+- Fabric beta.4 and NeoForge beta.3 are public. The unreleased mainline repairs are covered by automated unit, build, compatibility, and artifact checks, but they have not completed a new exact-JAR live gameplay/profile pass or publication.
+- A future NeoForge line release still requires the exact same built JAR to pass both version-specific runtime harnesses and live checks; separate source builds do not prove that same-binary claim.
 - The settings screen controls local preferences only. Key rebinds remain in Minecraft's standard Controls screen.
-- The default state is disabled. the maintainer must intentionally toggle it on.
+- The default state is disabled. A player must intentionally toggle it on.
 - User-facing Please Stop toggle feedback and the launch reminder toast are creative-only.
 - Toast visibility is controlled by `showToasts` in `config/please_stop.json` and the `Toggle Please Stop Toasts` keybind.

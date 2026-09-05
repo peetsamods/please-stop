@@ -105,7 +105,7 @@ final class CreativeFlightAssistTest {
                 false,
                 true,
                 true,
-                false
+                true
         );
 
         assertEquals(CreativeFlightAssist.Action.NONE, result.action());
@@ -131,8 +131,27 @@ final class CreativeFlightAssistTest {
     }
 
     @Test
+    void manualFlightAssistOffSurvivesTemporarySwimmingExclusion() {
+        CreativeFlightAssist.Transition result = transition(
+                CreativeFlightAssistMode.ALWAYS_ON_IN_CREATIVE,
+                CreativeFlightAssistMode.ALWAYS_ON_IN_CREATIVE,
+                false,
+                true,
+                false,
+                false,
+                false,
+                true
+        );
+
+        assertEquals(CreativeFlightAssist.Action.NONE, result.action());
+        assertFalse(result.assistActive());
+        assertTrue(result.manuallyDisabled());
+    }
+
+    @Test
     void disablingPleaseStopResetsFlightAssistSession() {
         CreativeFlightAssist.Transition result = transition(
+                false,
                 CreativeFlightAssistMode.ALWAYS_ON_IN_CREATIVE,
                 CreativeFlightAssistMode.ALWAYS_ON_IN_CREATIVE,
                 false,
@@ -171,9 +190,34 @@ final class CreativeFlightAssistTest {
             boolean assistActive,
             boolean manuallyDisabled
     ) {
+        return transition(
+                true,
+                mode,
+                previousMode,
+                eligible,
+                onGround,
+                flying,
+                wasFlyingLastTick,
+                assistActive,
+                manuallyDisabled
+        );
+    }
+
+    private static CreativeFlightAssist.Transition transition(
+            boolean pleaseStopEnabled,
+            CreativeFlightAssistMode mode,
+            CreativeFlightAssistMode previousMode,
+            boolean eligible,
+            boolean onGround,
+            boolean flying,
+            boolean wasFlyingLastTick,
+            boolean assistActive,
+            boolean manuallyDisabled
+    ) {
         return CreativeFlightAssist.transition(new CreativeFlightAssist.State(
                 mode,
                 previousMode,
+                pleaseStopEnabled,
                 eligible,
                 onGround,
                 flying,

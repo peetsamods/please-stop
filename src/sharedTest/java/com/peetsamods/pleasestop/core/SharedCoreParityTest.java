@@ -34,6 +34,7 @@ final class SharedCoreParityTest {
                         CreativeFlightAssistMode.PERSISTENT_AFTER_ACTIVATION,
                         true,
                         true,
+                        true,
                         false,
                         true,
                         true,
@@ -50,6 +51,7 @@ final class SharedCoreParityTest {
                 new CreativeFlightAssistLogic.State(
                         CreativeFlightAssistMode.PERSISTENT_AFTER_ACTIVATION,
                         CreativeFlightAssistMode.PERSISTENT_AFTER_ACTIVATION,
+                        true,
                         true,
                         false,
                         true,

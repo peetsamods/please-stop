@@ -2,8 +2,8 @@
 
 ## Working Order
 
-1. Run repo preflight and confirm the beta.3 baseline is clean.
-2. Read [PORTING_MAP.md](../porting/PORTING_MAP.md), the behavioral contract, config spec, runtime architecture, handoff, and lessons.
+1. Run repo preflight and confirm the current `main` baseline is clean.
+2. Read [PORTING_MAP.md](../porting/PORTING_MAP.md), the behavioral contract, config spec, and runtime architecture.
 3. Change loader-neutral behavior in shared source first and keep its unit tests green.
 4. Implement only the adapter/hook surface needed by one target.
 5. Run that target's clean test/build command and inspect its jar.
@@ -14,27 +14,27 @@
 ## Planned Layout
 
 ```text
-src/shared/                         loader-neutral beta.3 rules and config
+src/shared/                         loader-neutral rules and config
 src/main/                           existing Fabric 1.21.11 adapter
 ports/neoforge-1.21.1/             NeoForge line-jar build and 1.21.1 proof harness
-ports/neoforge-1.21.11/            same-binary 1.21.11 compatibility harness; not a deliverable jar
-ports/forge-1.20.1/                Forge line-jar build and 1.20.1 proof harness
-scripts/verify-ports.sh             build and artifact-identity coordinator
+ports/neoforge-1.21.11/            1.21.11 source/compiled-hook compatibility harness; not a deliverable jar
+ports/neoforge-1.21.1-runtime/     exact line-jar runtime harness for 1.21.1
+ports/neoforge-1.21.11-runtime/    exact same line-jar runtime harness for 1.21.11
 ```
 
-The deliverables are one NeoForge `1.21.x` jar and one Forge `1.20.x` jar. Compatibility harnesses may compile version-specific checks, but they must test the unchanged line jar and must not create an additional shipped artifact. Neither deliverable depends on a separately installed common library.
+The NeoForge deliverable is one `1.21.x` jar. The version-specific source harnesses check compilation and hook shape, while the runtime harnesses must load the unchanged line jar. A separately built `1.21.11` harness jar is proof scaffolding, not a second release artifact.
 
 ## Proof Commands
 
 | Target | Command |
 | --- | --- |
-| Fabric baseline | `./gradlew clean test build` |
-| NeoForge 1.21.1 | `JAVA_HOME=$(/usr/libexec/java_home -v 21) ports/neoforge-1.21.1/gradlew -p ports/neoforge-1.21.1 clean test build` |
-| NeoForge 1.21.11 | `JAVA_HOME=$(/usr/libexec/java_home -v 21) ports/neoforge-1.21.11/gradlew -p ports/neoforge-1.21.11 clean test build` |
-| Forge 1.20.1 | `JAVA_HOME=<a Java 17 JDK> ports/forge-1.20.1/gradlew -p ports/forge-1.20.1 clean test build` |
-| All automated gates | `scripts/verify-ports.sh` |
+| Fabric baseline | `./gradlew --no-daemon clean test build` |
+| NeoForge 1.21.1 | `ports/neoforge-1.21.1/gradlew --no-daemon -p ports/neoforge-1.21.1 clean test build` |
+| NeoForge 1.21.11 | `ports/neoforge-1.21.1/gradlew --no-daemon -p ports/neoforge-1.21.11 clean test build` |
+| Release-JAR unit checks | `python3 -m unittest tools/test_verify_release_artifact.py` |
+| Exact line-jar binding | Run `verifyProductionJar` in both `neoforge-1.21.1-runtime` and `neoforge-1.21.11-runtime` after updating their candidate path and expected SHA-256 |
 
-Java 17 is not currently installed on this machine. The Forge build remains blocked until a project-local/toolchain-downloaded or installed Java 17 runtime is available; do not silently compile the Forge jar for Java 21 instead.
+All current Fabric and NeoForge builds use Java 21. A build and source-harness green does not replace the two exact-JAR runtime checks.
 
 ## Live Evidence Packet
 

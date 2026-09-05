@@ -2,8 +2,11 @@ package com.peetsamods.pleasestop.neoforge;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassReader;
@@ -164,6 +167,46 @@ final class NeoForgeBinaryCompatibilityTest {
         assertFalse(redirects.isEmpty());
     }
 
+    @Test
+    void targetLocalPlayerAiStepContainsExactlyOneSupportedGroundFlightTarget() throws IOException {
+        List<String> supportedTargets = new ArrayList<>();
+        readMinecraftClass(LOCAL_PLAYER + ".class", new ClassVisitor(Opcodes.ASM9) {
+            @Override
+            public MethodVisitor visitMethod(
+                    int access,
+                    String name,
+                    String descriptor,
+                    String signature,
+                    String[] exceptions
+            ) {
+                if (!"aiStep".equals(name)) {
+                    return null;
+                }
+                return new MethodVisitor(Opcodes.ASM9) {
+                    @Override
+                    public void visitMethodInsn(
+                            int opcode,
+                            String owner,
+                            String methodName,
+                            String methodDescriptor,
+                            boolean isInterface
+                    ) {
+                        String target = "L" + owner + ";" + methodName + methodDescriptor;
+                        if ((LEGACY_GROUND_FLIGHT_TARGET.equals(target)
+                                || CURRENT_GROUND_FLIGHT_TARGET.equals(target))
+                                && !supportedTargets.contains(target)) {
+                            supportedTargets.add(target);
+                        }
+                    }
+                };
+            }
+        });
+
+        assertEquals(1, supportedTargets.size(),
+                "The target LocalPlayer.aiStep must expose exactly one supported ground-flight target: "
+                        + supportedTargets);
+    }
+
     private static void assertRedirectIsOptional(List<RedirectTarget> redirects, String target) {
         RedirectTarget redirect = redirects.stream()
                 .filter(candidate -> target.equals(candidate.target))
@@ -176,6 +219,19 @@ final class NeoForgeBinaryCompatibilityTest {
         try (InputStream input = NeoForgeBinaryCompatibilityTest.class.getClassLoader().getResourceAsStream(resource)) {
             assertFalse(input == null, "Missing compiled class resource " + resource);
             new ClassReader(input).accept(visitor, ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
+        }
+    }
+
+    private static void readMinecraftClass(String resource, ClassVisitor visitor) throws IOException {
+        String minecraftJarPath = System.getProperty("pleaseStop.minecraftJar");
+        assertFalse(minecraftJarPath == null || minecraftJarPath.isBlank(),
+                "Missing pleaseStop.minecraftJar test property");
+        try (ZipFile minecraftJar = new ZipFile(Path.of(minecraftJarPath).toFile())) {
+            ZipEntry entry = minecraftJar.getEntry(resource);
+            assertFalse(entry == null, "Missing compiled Minecraft class " + resource);
+            try (InputStream input = minecraftJar.getInputStream(entry)) {
+                new ClassReader(input).accept(visitor, ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
+            }
         }
     }
 

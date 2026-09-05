@@ -17,6 +17,7 @@ base {
 
 sourceSets {
     main.java.srcDir "src/shared/java"
+    test.java.srcDir "src/sharedTest/java"
 }
 
 dependencies {
@@ -41,8 +42,17 @@ tasks.withType(JavaCompile).configureEach {
     it.options.release = 21
 }
 
+def hasCommandLineTestFilter = gradle.startParameter.taskRequests.any { request ->
+    request.args.contains("--tests")
+}
+
 test {
     useJUnitPlatform()
+    afterSuite { descriptor, result ->
+        if (descriptor.parent == null && !hasCommandLineTestFilter && filter.includePatterns.empty && result.testCount != 53) {
+            throw new GradleException("Expected 53 root tests, but ran ${result.testCount}.")
+        }
+    }
 }
 
 java {

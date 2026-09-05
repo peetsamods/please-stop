@@ -26,8 +26,9 @@ Please Stop exists to stop unwanted residual creative flight drift when the main
 - When Please Stop is enabled, Creative Flight Assist may use Minecraft's normal Creative ability update to activate or restore local Creative flight. It must only do this for an eligible Creative player who already has permission to fly.
 - In `Persistent after activation` mode, an activated Flight Assist may restore flight only when the player returns to ground level. In `Always on in Creative` mode, it may activate flight without double-Space.
 - The Flight Assist keybind may explicitly turn this per-session assistance on or off.
-- Once the player explicitly turns Flight Assist off, entering vanilla Creative flight must not silently turn it back on; that manual choice remains until explicit re-enablement, a mode change, or a master-switch session reset.
+- Once the player explicitly turns Flight Assist off, entering vanilla Creative flight or passing through a temporary excluded state must not silently turn it back on; that manual choice remains until explicit re-enablement, a mode change, or a master-switch session reset.
 - `VANILLA` Flight Assist mode disables only automatic flight activation/restoration; it does not disable Please Stop's inertia brake or eligible Sneak camera stabilization. The master switch disables all Please Stop behavior.
+- Eligibility follows the player's current Creative state. A single-player world's original/default game mode must not block Please Stop after the player legitimately enters Creative mode.
 
 ## Forbidden Behavior
 
@@ -61,8 +62,11 @@ Please Stop exists to stop unwanted residual creative flight drift when the main
 - Toggle off preserves vanilla creative flight drift.
 - Toggle on stops creative flight drift after input release.
 - Toggle on stops creative flight drift after horizontal input release even when jump and sneak are held together.
+- Ground-level Sneak alone does not create a false recent-input release or authorize braking unrelated velocity.
 - Ground-level Flight Assist remains active and stops horizontal drift when Sneak stays held after movement is released.
 - Ground-level Sneak keeps a stable camera while Please Stop and Creative flight are active.
+- An explicit Flight Assist OFF choice survives temporary exclusions such as swimming, riding, gliding, recent damage, a flight lock, or a temporary loss of flight permission.
+- Please Stop controls work for a currently Creative player even when the single-player world was originally created in another game mode.
 - Airborne Sneak still descends normally.
 - Active input still moves normally.
 - Excluded states show no intentional behavior change.

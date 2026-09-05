@@ -1,11 +1,19 @@
 # Please Stop Changelog
 
-## 0.1.0-beta.4 - Local Release Candidate
+## Unreleased
+
+- Keep an explicit Creative Flight Assist OFF choice through temporary exclusions such as swimming, riding, gliding, recent damage, a flight lock, or a temporary loss of flight permission.
+- Use the player's current Creative state for controls, even when a single-player world was originally created in another game mode.
+- Prevent ground-level Sneak by itself from authorizing a later brake of unrelated velocity.
+- Run shared parity tests in the root Fabric suite and fail if the full suite does not execute exactly 53 tests.
+- Limit the NeoForge line declaration to the tested `1.21.1` and `1.21.11` targets, and inspect each target's compiled hook shape during tests.
+- Add a release-JAR verifier for loader metadata, version and Minecraft identity, approved package and author identity, and development/source content exclusions.
+
+## 0.1.0-beta.4 - Public Beta
 
 - Fixed Creative Flight Assist silently turning itself back on when the player entered vanilla Creative flight after explicitly turning Flight Assist OFF.
 - Kept mode changes and the Please Stop master-switch session reset as the intentional ways to clear that manual OFF choice.
-- Rebuilt and verified local Fabric candidates for `1.21.11`, `1.21.1`, and `26.2`.
-- Staged the three verified binary jars, checksum manifest, and player changelog in Ready Jars; kept live-profile installation, uploads, and publication outside this slice.
+- Published matching Fabric builds for `1.21.11`, `1.21.1`, and `26.2`.
 
 ## 0.1.0-beta.3 - Public Beta
 

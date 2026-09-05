@@ -25,6 +25,7 @@ final class CreativeFlightAssist {
     record State(
             CreativeFlightAssistMode mode,
             CreativeFlightAssistMode previousMode,
+            boolean pleaseStopEnabled,
             boolean eligible,
             boolean onGround,
             boolean flying,
@@ -56,6 +57,7 @@ final class CreativeFlightAssist {
         Transition transition = transition(new State(
                 mode,
                 previousMode,
+                pleaseStopEnabled,
                 eligible,
                 onGround,
                 flying,
@@ -105,6 +107,7 @@ final class CreativeFlightAssist {
                 new CreativeFlightAssistLogic.State(
                         state.mode(),
                         state.previousMode(),
+                        state.pleaseStopEnabled(),
                         state.eligible(),
                         state.onGround(),
                         state.flying(),

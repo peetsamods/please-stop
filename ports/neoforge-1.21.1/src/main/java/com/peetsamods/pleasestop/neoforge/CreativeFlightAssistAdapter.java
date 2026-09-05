@@ -25,6 +25,7 @@ final class CreativeFlightAssistAdapter {
                 new CreativeFlightAssistLogic.State(
                         mode,
                         previousMode,
+                        enabled,
                         eligible,
                         onGround,
                         flying,

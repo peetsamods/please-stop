@@ -77,4 +77,11 @@ tasks.withType(JavaCompile).configureEach {
 
 tasks.named('test', Test).configure {
     useJUnitPlatform()
+    doFirst {
+        def minecraftJar = layout.buildDirectory.file("moddev/artifacts/neoforge-${project.neo_version}.jar").get().asFile
+        if (!minecraftJar.isFile()) {
+            throw new GradleException("Missing compiled NeoForge Minecraft artifact: ${minecraftJar.name}")
+        }
+        systemProperty 'pleaseStop.minecraftJar', minecraftJar.absolutePath
+    }
 }

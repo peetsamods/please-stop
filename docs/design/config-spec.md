@@ -26,7 +26,7 @@ Flight Assist controls only automatic Creative-flight activation/restoration. Ch
 
 - Name: `Toggle Please Stop`
 - Default key: `B`
-- Action: invert `enabled` only when the local player is in creative mode
+- Action: invert `enabled` only when the local player is currently in creative mode, regardless of the single-player world's original/default game mode
 - Persistence: save the new value to the local config
 - Feedback: in creative mode, local actionbar text shows `Please Stop: ON` or `Please Stop: OFF`
 
@@ -43,7 +43,7 @@ Flight Assist controls only automatic Creative-flight activation/restoration. Ch
 - Name: `Toggle Creative Flight Assist`
 - Default key: `V`
 - Action: activate or deactivate the current session's Flight Assist using Minecraft's normal Creative ability update.
-- Persistence: an explicit session OFF choice survives later vanilla Creative-flight activations until the player presses this key again, changes Flight Assist mode, or resets the session through the master switch.
+- Persistence: an explicit session OFF choice survives later vanilla Creative-flight activations and temporary excluded states until the player presses this key again, changes Flight Assist mode, or resets the session through the master switch.
 - Master gate: no-op while `enabled=false`, so Flight Assist never creates a flight state without Please Stop's no-inertia brake.
 - Safety: no-op unless the local player is an eligible Creative player with flight permission; it respects spectator, gliding, swimming, vehicles, recent damage, and a flight lock.
 

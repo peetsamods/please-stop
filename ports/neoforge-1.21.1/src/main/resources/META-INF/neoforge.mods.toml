@@ -7,7 +7,7 @@ issueTrackerURL="https://github.com/peetsamods/please-stop/issues"
 modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
-authors="the maintainer"
+authors="Peetsa"
 description='''
 Stops unwanted residual Creative flight drift while preserving active input and excluded movement states.
 '''

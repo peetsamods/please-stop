@@ -2,7 +2,7 @@
 
 Please Stop is a tiny Minecraft mod idea for builders who are tired of creative flight drifting past the exact block they meant to place.
 
-Planned v1 behavior:
+Current behavior:
 
 - Fabric-first client mod.
 - Display name: `Please Stop`.
@@ -15,14 +15,14 @@ Planned v1 behavior:
 - When enabled, creative flight inertia stops immediately after movement, jump, or sneak input is released.
 - When disabled, vanilla creative flight behavior remains unchanged.
 
-This repo now has public Fabric beta.3 jars for `1.21.11`, `1.21.1`, and `26.2`, including Creative Flight Assist, settings, the creative-flight brake, exclusion gates, and creative-only feedback. Beta.4 is the local correction candidate that keeps an explicit Flight Assist OFF choice intact when the player later enters vanilla Creative flight.
+Public releases currently include Fabric beta.4 for `1.21.11`, `1.21.1`, and `26.2`, plus NeoForge beta.3 for the `1.21.x` line. The next unreleased mainline builds are Fabric beta.5 and NeoForge beta.4; they tighten Creative eligibility, preserve explicit Flight Assist choices through temporary exclusions, and strengthen compatibility and release-artifact checks.
 
-Beta release docs:
+Project docs:
 
-- [Beta Candidate](docs/release/PUBLIC_RELEASE_CANDIDATE.md)
 - [Changelog](docs/release/CHANGELOG.md)
 - [Known Limitations](docs/release/KNOWN_LIMITATIONS.md)
+- [Behavior Contract](docs/design/please-stop-contract.md)
+- [Configuration](docs/design/config-spec.md)
+- [Porting Map](docs/porting/PORTING_MAP.md)
 
 License: [MIT](LICENSE).
-
-Start with [docs/BINDER.md](docs/BINDER.md).
