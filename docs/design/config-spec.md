@@ -14,7 +14,7 @@ This file defines the planned v1 config surface. It must stay consistent with [p
 
 - Name: `Toggle Please Stop`
 - Default key: `B`
-- Action: invert `enabled`
+- Action: invert `enabled` only when the local player is currently in Creative mode, regardless of the single-player world's original/default game mode
 - Persistence: save the new value to the local config
 - Feedback: local actionbar text shows `Please Stop: ON` or `Please Stop: OFF`
 

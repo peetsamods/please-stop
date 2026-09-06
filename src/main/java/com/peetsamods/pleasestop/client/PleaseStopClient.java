@@ -14,7 +14,6 @@ import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.GameType;
-import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,20 +46,20 @@ public final class PleaseStopClient implements ClientModInitializer {
         activeConfig = config;
         toggleKeyMapping = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.please_stop.toggle",
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_B,
+                InputConstants.Type.KEYBOARD,
+                InputConstants.KEY_B,
                 CATEGORY
         ));
         toggleToastsKeyMapping = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.please_stop.toggle_toasts",
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_N,
+                InputConstants.Type.KEYBOARD,
+                InputConstants.KEY_N,
                 CATEGORY
         ));
         toggleFlightAssistKeyMapping = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-                "key.please_stop.toggle_flight_assist", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, CATEGORY));
+                "key.please_stop.toggle_flight_assist", InputConstants.Type.KEYBOARD, InputConstants.KEY_V, CATEGORY));
         openSettingsKeyMapping = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-                "key.please_stop.open_settings", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_M, CATEGORY));
+                "key.please_stop.open_settings", InputConstants.Type.KEYBOARD, InputConstants.KEY_M, CATEGORY));
 
         ClientTickEvents.END_CLIENT_TICK.register(this::onEndClientTick);
         LOGGER.info("Please Stop client loaded. enabled={}", config.isEnabled());
@@ -170,11 +169,12 @@ public final class PleaseStopClient implements ClientModInitializer {
         return isCreativePlayer(client)
                 && client.player.getAbilities().flying
                 && client.player.input != null
-                && CreativeFlightBrake.hasActiveFlightInput(client.player.input.keyPresses);
+                && CreativeFlightBrake.hasActiveFlightInput(client.player.input.keyPresses, client.player.onGround());
     }
 
     private boolean isCreativePlayer(Minecraft client) {
         return client.player != null
+                && client.player.isCreative()
                 && client.gameMode != null
                 && isCreativeGameMode(client.gameMode.getPlayerMode());
     }
@@ -190,36 +190,16 @@ public final class PleaseStopClient implements ClientModInitializer {
         return allowsUserFacingControls(
                 client.player != null,
                 client.player != null && client.player.isCreative(),
-                client.getSingleplayerServer() != null,
-                clientGameType,
-                getSingleplayerSaveGameType(client)
+                clientGameType
         );
     }
 
     static boolean allowsUserFacingControls(
             boolean playerPresent,
             boolean playerCreative,
-            boolean singleplayer,
-            GameType clientGameType,
-            GameType singleplayerSaveGameType
+            GameType clientGameType
     ) {
-        if (!playerPresent || !playerCreative || !isCreativeGameMode(clientGameType)) {
-            return false;
-        }
-
-        if (singleplayer) {
-            return isCreativeGameMode(singleplayerSaveGameType);
-        }
-
-        return true;
-    }
-
-    private GameType getSingleplayerSaveGameType(Minecraft client) {
-        if (client.getSingleplayerServer() == null || client.getSingleplayerServer().getWorldData() == null) {
-            return null;
-        }
-
-        return client.getSingleplayerServer().getWorldData().getGameType();
+        return playerPresent && playerCreative && isCreativeGameMode(clientGameType);
     }
 
     private void saveConfig() {
