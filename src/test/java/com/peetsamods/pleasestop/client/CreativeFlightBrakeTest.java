@@ -126,6 +126,18 @@ final class CreativeFlightBrakeTest {
         assertEquals(true, CreativeFlightBrake.hasActiveFlightInput(sneakOnly, false));
     }
 
+    @Test
+    void groundedSneakDoesNotAuthorizeBrakingLaterUnrelatedVelocity() {
+        Input sneakOnly = input(false, false, false, false, false, true);
+        boolean recentFlightInput = CreativeFlightBrake.hasActiveFlightInput(sneakOnly, true);
+
+        CreativeFlightBrake.Action action = CreativeFlightBrake.action(new CreativeFlightBrake.State(
+                true, true, true, true, false, false, false, false, false,
+                NO_INPUT, DRIFT, recentFlightInput, false));
+
+        assertEquals(CreativeFlightBrake.Action.NONE, action);
+    }
+
     private static Input input(
             boolean forward,
             boolean backward,

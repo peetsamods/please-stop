@@ -9,9 +9,9 @@ final class CreativeFlightAssist {
                        boolean flyingLocked) {
     }
 
-    record State(CreativeFlightAssistMode mode, CreativeFlightAssistMode previousMode, boolean eligible,
-                 boolean onGround, boolean flying, boolean wasFlyingLastTick, boolean assistActive,
-                 boolean manuallyDisabled) {
+    record State(CreativeFlightAssistMode mode, CreativeFlightAssistMode previousMode, boolean pleaseStopEnabled,
+                 boolean eligible, boolean onGround, boolean flying, boolean wasFlyingLastTick,
+                 boolean assistActive, boolean manuallyDisabled) {
     }
 
     record Transition(Action action, boolean assistActive, boolean manuallyDisabled) {
@@ -28,7 +28,7 @@ final class CreativeFlightAssist {
         boolean eligible = isEligible(player, pleaseStopEnabled, flyingLocked);
         boolean flying = player != null && player.getAbilities().flying;
         boolean onGround = player != null && player.isOnGround();
-        Transition transition = transition(new State(mode, previousMode, eligible, onGround, flying,
+        Transition transition = transition(new State(mode, previousMode, pleaseStopEnabled, eligible, onGround, flying,
                 wasFlyingLastTick, assistActive, manuallyDisabled));
 
         assistActive = transition.assistActive();
@@ -68,7 +68,7 @@ final class CreativeFlightAssist {
     }
 
     static Transition transition(State state) {
-        if (!state.eligible() || state.mode() == CreativeFlightAssistMode.VANILLA) {
+        if (!state.pleaseStopEnabled() || state.mode() == CreativeFlightAssistMode.VANILLA) {
             return new Transition(Action.NONE, false, false);
         }
 
@@ -77,6 +77,9 @@ final class CreativeFlightAssist {
         if (state.mode() != state.previousMode()) {
             active = false;
             suppressed = false;
+        }
+        if (!state.eligible()) {
+            return new Transition(Action.NONE, active, suppressed);
         }
         if (state.flying() && !suppressed) {
             // Vanilla flight entry must not undo an explicit Flight Assist OFF choice.

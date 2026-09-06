@@ -18,6 +18,9 @@ Please Stop exists to stop unwanted residual creative flight drift when the main
 - When disabled, vanilla creative flight behavior should remain unchanged.
 - The keybind may toggle the local enabled state.
 - The config may persist the enabled state locally.
+- Creative Flight Assist may activate or restore flight only for a currently eligible Creative player who already has permission to fly.
+- An explicit Flight Assist OFF choice survives vanilla flight entry and temporary exclusions until explicit re-enablement, a mode change, or a master-switch session reset.
+- Eligibility follows the player's current Creative state; a single-player world's original/default game mode is not an additional gate.
 
 ## Forbidden Behavior
 
@@ -48,6 +51,9 @@ Please Stop exists to stop unwanted residual creative flight drift when the main
 
 - Toggle off preserves vanilla creative flight drift.
 - Toggle on stops creative flight drift after input release.
+- Ground-level Sneak alone does not create a false recent-input release or authorize braking unrelated velocity.
+- An explicit Flight Assist OFF choice survives temporary exclusions such as swimming, riding, gliding, recent damage, a flight lock, or a temporary loss of flight permission.
+- Please Stop controls work for a currently Creative player even when the single-player world was originally created in another game mode.
 - Active input still moves normally.
 - Excluded states show no intentional behavior change.
 
