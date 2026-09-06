@@ -1,54 +1,42 @@
-# Please Stop Private Release Candidate
+# Please Stop Fabric 1.21.1 Release Candidate Checklist
 
 ## Identity
 
 - Display name: `Please Stop`
 - Mod id: `please_stop`
-- Version: `0.1.0-alpha.0+1.21.11`
-- Minecraft target: `1.21.11`
+- Version: `0.1.0-beta.5+1.21.1`
+- Minecraft target: `1.21.1`
 - Loader: Fabric
 - Java: `21`
 - License: MIT, recorded in `LICENSE` and declared in `fabric.mod.json`
-- Archive name: `please-stop-0.1.0-alpha.0+1.21.11.jar`
-- Local build path: `build/libs/please-stop-0.1.0-alpha.0+1.21.11.jar`
-- SHA-256: `d528b5b5eaa1acf7a2e0eeaed38ed4401cf5bf426f8b03b0fbdfa71b122b9cd7`
-- Approved smoke-test profile path: `<modrinth-profiles>/profiles/Slabbed+Terrain Slabs`
-- Approved staged path: `<modrinth-profiles>/profiles/Slabbed+Terrain Slabs/mods/please-stop-0.1.0-alpha.0+1.21.11.jar`
+- Archive name: `please-stop-0.1.0-beta.5+1.21.1.jar`
+- Local build path: `build/libs/please-stop-0.1.0-beta.5+1.21.1.jar`
+- Final SHA-256: record after the clean build from the tagged commit
 
 ## Behavior Included
 
 - Keybind: `Toggle Please Stop`, default `B`.
-- Config: local JSON boolean `enabled`, default `false`.
+- Config: local JSON preferences, with `enabled=false` by default.
 - Enabled behavior: residual creative flight drift is cleared after active movement/up/down flight input is released.
 - Disabled behavior: vanilla creative flight drift remains.
 - Active held creative-flight input remains normal.
+- Creative Flight Assist OFF survives temporary exclusions and later vanilla flight entry.
+- Controls follow the player's current Creative state, not the world's original/default mode.
+- Ground-level Sneak does not authorize braking unrelated velocity.
 - Exclusions: non-creative/non-flying movement, spectator, elytra/gliding, swimming, vehicles, recently-hurt knockback-adjacent movement, and unknown/server-correction-like velocity.
 
-## Private RC Proof Checklist
+## Required Release Proof
 
-- `./gradlew clean test build`
+- Clean 38-test build from the exact release commit.
+- Release-JAR identity, purity, and repository privacy checks pass.
 - Jar contains `fabric.mod.json`.
 - Repo contains root `LICENSE` matching the MIT metadata declaration.
 - Jar contains `com/peetsamods/pleasestop/client/PleaseStopClient.class`.
 - Jar contains `com/peetsamods/pleasestop/client/CreativeFlightBrake.class`.
-- Local jar hash matches staged jar hash.
-- Approved Modrinth profile loads Minecraft `1.21.11` with `please_stop`.
-- Approved top `New World` enters singleplayer.
-- Toggle smoke proof logs `Please Stop toggled on.` and `Please Stop toggled off.`
-- Profile is left with `enabled=false`.
-- No Minecraft Java process remains after stop.
-
-## Proof Results
-
-- Build/test: `./gradlew clean test build` passed.
-- Jar contents: `fabric.mod.json`, `PleaseStopClient.class`, `CreativeFlightBrake.class`, `CreativeFlightBrake$State.class`, and `PleaseStopConfig.class` are present.
-- License proof: root `LICENSE` exists and `fabric.mod.json` declares `MIT`.
-- Local jar hash matched the staged Modrinth jar hash: `d528b5b5eaa1acf7a2e0eeaed38ed4401cf5bf426f8b03b0fbdfa71b122b9cd7`.
-- Smoke proof log: `/tmp/please-stop-phase6-rc-stopped-latest.log`.
-- Smoke screenshots: `/tmp/please-stop-phase6-rc-window.png` and `/tmp/please-stop-phase6-rc-toggle.png`.
-- Final profile config proof: `/tmp/please-stop-phase6-rc-final-config.json` contains `enabled=false`.
-- Stop proof: Modrinth showed no instances running and no matching Minecraft Java process remained.
+- Exact candidate JAR loads in the intended Minecraft `1.21.1` profile.
+- `B`, `N`, `V`, and `M` work; config persistence and the beta.5 behavior fixes pass.
+- Profile is left with `enabled=false`, and the tested/uploaded JAR hashes match.
 
 ## Release Boundary
 
-This is a private release-candidate packet only. Do not publish, upload, create public release drafts, or claim anti-cheat or broad multiplayer compatibility without the maintainer explicitly approving that next lane.
+Publish only the verified beta.5 JAR and its complete changelog to the explicitly authorized Modrinth and CurseForge destinations. Do not broaden multiplayer, anti-cheat, or modpack compatibility claims.

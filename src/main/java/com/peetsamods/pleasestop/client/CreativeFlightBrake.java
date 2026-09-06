@@ -186,10 +186,6 @@ final class CreativeFlightBrake {
         ));
     }
 
-    static boolean hasActiveFlightInput(Input input) {
-        return hasActiveFlightInput(input, false);
-    }
-
     static boolean hasActiveFlightInput(Input input, boolean onGround) {
         if (input == null) {
             return false;

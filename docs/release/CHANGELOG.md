@@ -1,6 +1,6 @@
 # Please Stop Changelog
 
-## 0.1.0-beta.5+1.21.1 - Local Candidate
+## 0.1.0-beta.5+1.21.1 - Release Candidate
 
 - Preserve an explicit Creative Flight Assist OFF choice through temporary movement exclusions.
 - Use the player's current Creative state instead of the world's original/default game mode for Please Stop controls.
