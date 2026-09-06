@@ -1,13 +1,19 @@
 # Please Stop Changelog
 
-## Unreleased
+## 0.1.0-beta.5 - Fabric Release Candidate
 
 - Keep an explicit Creative Flight Assist OFF choice through temporary exclusions such as swimming, riding, gliding, recent damage, a flight lock, or a temporary loss of flight permission.
 - Use one shared current-Creative rule for Fabric and NeoForge controls, even when a single-player world was originally created in another game mode.
 - Prevent ground-level Sneak by itself from authorizing a later brake of unrelated velocity.
-- Run shared parity tests in the root Fabric suite and fail if the full suite does not execute exactly 54 tests; require 17 tests in each NeoForge compatibility build.
-- Limit the NeoForge line declaration to the tested `1.21.1` and `1.21.11` targets, and inspect each target's compiled hook shape during tests.
-- Add a release-JAR verifier for loader metadata, version and Minecraft identity, approved package and author identity, and development/source content exclusions.
+- Require count-gated tests and release-JAR identity, metadata, package, and development-content checks on every Fabric beta.5 target.
+
+## 0.1.0-beta.4 - NeoForge Release Candidate
+
+- Include the beta.5 behavior repairs: manual Flight Assist OFF survives temporary exclusions, controls follow the player's current Creative state, and ground-level Sneak does not authorize braking unrelated velocity.
+- Include the earlier fix that keeps manual Flight Assist OFF intact across later vanilla Creative-flight activation.
+- Limit the line JAR to the tested Minecraft `1.21.1` and `1.21.11` targets.
+- Use privacy-clean package and author metadata and require the release-JAR verifier before publication.
+- Require both version-specific 17-test builds, compiled-hook checks, and exact same-JAR runtime and live acceptance on both versions.
 
 ## 0.1.0-beta.4 - Public Beta
 
