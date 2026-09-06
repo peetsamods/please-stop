@@ -3,9 +3,9 @@
 ## Unreleased
 
 - Keep an explicit Creative Flight Assist OFF choice through temporary exclusions such as swimming, riding, gliding, recent damage, a flight lock, or a temporary loss of flight permission.
-- Use the player's current Creative state for controls, even when a single-player world was originally created in another game mode.
+- Use one shared current-Creative rule for Fabric and NeoForge controls, even when a single-player world was originally created in another game mode.
 - Prevent ground-level Sneak by itself from authorizing a later brake of unrelated velocity.
-- Run shared parity tests in the root Fabric suite and fail if the full suite does not execute exactly 53 tests.
+- Run shared parity tests in the root Fabric suite and fail if the full suite does not execute exactly 54 tests; require 17 tests in each NeoForge compatibility build.
 - Limit the NeoForge line declaration to the tested `1.21.1` and `1.21.11` targets, and inspect each target's compiled hook shape during tests.
 - Add a release-JAR verifier for loader metadata, version and Minecraft identity, approved package and author identity, and development/source content exclusions.
 

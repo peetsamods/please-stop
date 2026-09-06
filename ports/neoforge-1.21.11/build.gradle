@@ -77,8 +77,17 @@ tasks.withType(JavaCompile).configureEach {
     options.release = 21
 }
 
+def hasCommandLineTestFilter = gradle.startParameter.taskRequests.any { request ->
+    request.args.contains('--tests')
+}
+
 tasks.named('test', Test).configure {
     useJUnitPlatform()
+    afterSuite { descriptor, result ->
+        if (descriptor.parent == null && !hasCommandLineTestFilter && filter.includePatterns.empty && result.testCount != 17) {
+            throw new GradleException("Expected 17 NeoForge 1.21.11 tests, but ran ${result.testCount}.")
+        }
+    }
     doFirst {
         def minecraftJar = layout.buildDirectory.file("moddev/artifacts/neoforge-${project.neo_version}.jar").get().asFile
         if (!minecraftJar.isFile()) {

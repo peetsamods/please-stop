@@ -4,6 +4,7 @@ import com.peetsamods.pleasestop.client.CreativeSneakCamera;
 import com.peetsamods.pleasestop.client.LaunchToastGate;
 import com.peetsamods.pleasestop.config.PleaseStopConfig;
 import com.peetsamods.pleasestop.core.CreativeFlightBrakeLogic;
+import com.peetsamods.pleasestop.core.UserFacingControlsLogic;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.logging.LogUtils;
 import java.io.IOException;
@@ -252,14 +253,11 @@ final class PleaseStopNeoForgeClient {
     }
 
     private static boolean allowsUserFacingControls(Minecraft client) {
-        if (client.player == null
-                || !client.player.isCreative()
-                || client.gameMode == null
-                || client.gameMode.getPlayerMode() != GameType.CREATIVE) {
-            return false;
-        }
-        return client.getSingleplayerServer() == null
-                || client.getSingleplayerServer().getWorldData().getGameType() == GameType.CREATIVE;
+        return UserFacingControlsLogic.allows(
+                client.player != null,
+                client.player != null && client.player.isCreative(),
+                client.gameMode != null && client.gameMode.getPlayerMode() == GameType.CREATIVE
+        );
     }
 
     private static boolean isVanillaAlwaysFlying(Minecraft client) {

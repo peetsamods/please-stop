@@ -9,6 +9,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 final class SharedCoreParityTest {
     @Test
+    void userFacingControlsFollowTheCurrentCreativeState() {
+        assertTrue(UserFacingControlsLogic.allows(true, true, true));
+        assertFalse(UserFacingControlsLogic.allows(false, true, true));
+        assertFalse(UserFacingControlsLogic.allows(true, false, true));
+        assertFalse(UserFacingControlsLogic.allows(true, true, false));
+    }
+
+    @Test
     void flightAssistRequiresEverySafetyGate() {
         CreativeFlightAssistLogic.Eligibility eligible = eligibility();
         assertTrue(CreativeFlightAssistLogic.isEligible(eligible));

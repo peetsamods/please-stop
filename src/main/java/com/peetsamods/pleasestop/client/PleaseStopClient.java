@@ -1,6 +1,7 @@
 package com.peetsamods.pleasestop.client;
 
 import com.peetsamods.pleasestop.config.PleaseStopConfig;
+import com.peetsamods.pleasestop.core.UserFacingControlsLogic;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -223,7 +224,11 @@ public final class PleaseStopClient implements ClientModInitializer {
             boolean playerCreative,
             GameMode clientGameMode
     ) {
-        return playerPresent && playerCreative && isCreativeGameMode(clientGameMode);
+        return UserFacingControlsLogic.allows(
+                playerPresent,
+                playerCreative,
+                isCreativeGameMode(clientGameMode)
+        );
     }
 
     private void saveConfig() {

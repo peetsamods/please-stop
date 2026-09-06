@@ -185,10 +185,6 @@ final class CreativeFlightBrake {
         ));
     }
 
-    static boolean hasActiveFlightInput(PlayerInput input) {
-        return hasActiveFlightInput(input, false);
-    }
-
     static boolean hasActiveFlightInput(PlayerInput input, boolean onGround) {
         return CreativeFlightBrakeLogic.hasActiveFlightInput(input(input), onGround);
     }
