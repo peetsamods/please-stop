@@ -8,13 +8,11 @@ import org.junit.jupiter.api.Test;
 
 final class PleaseStopClientTest {
     @Test
-    void singleplayerSurvivalSaveBlocksUserFacingControlsEvenIfClientReportsCreative() {
-        assertFalse(PleaseStopClient.allowsUserFacingControls(
+    void currentCreativePlayerAndClientModeAllowControlsInSurvivalCreatedSingleplayerWorld() {
+        assertTrue(PleaseStopClient.allowsUserFacingControls(
                 true,
                 true,
-                true,
-                GameType.CREATIVE,
-                GameType.SURVIVAL
+                GameType.CREATIVE
         ));
     }
 
@@ -23,31 +21,25 @@ final class PleaseStopClientTest {
         assertFalse(PleaseStopClient.allowsUserFacingControls(
                 true,
                 false,
-                true,
-                GameType.CREATIVE,
                 GameType.CREATIVE
         ));
     }
 
     @Test
-    void singleplayerCreativeSaveAllowsUserFacingControlsWhenPlayerAndClientAreCreative() {
-        assertTrue(PleaseStopClient.allowsUserFacingControls(
+    void nonCreativeClientModeBlocksUserFacingControls() {
+        assertFalse(PleaseStopClient.allowsUserFacingControls(
                 true,
                 true,
-                true,
-                GameType.CREATIVE,
-                GameType.CREATIVE
+                GameType.SURVIVAL
         ));
     }
 
     @Test
-    void multiplayerCreativePlayerAllowsUserFacingControlsWithoutSingleplayerSaveMode() {
-        assertTrue(PleaseStopClient.allowsUserFacingControls(
-                true,
-                true,
+    void missingPlayerBlocksUserFacingControls() {
+        assertFalse(PleaseStopClient.allowsUserFacingControls(
                 false,
-                GameType.CREATIVE,
-                null
+                true,
+                GameType.CREATIVE
         ));
     }
 }

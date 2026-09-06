@@ -3,7 +3,7 @@
 Rules for ANY coding agent working in this repo (Claude, Codex, or otherwise). CLAUDE.md and
 AGENTS.md are identical copies; edit both together.
 
-## ⛔ NEVER COMMIT — read this before your first `git add`
+## Public repository safety — read before your first `git add`
 
 This is a PUBLIC repository. Its history was force-rewritten on 2026-08-07 to remove tracked
 development-diary docs and a table of the maintainer's absolute local filesystem paths. A sibling

@@ -170,11 +170,12 @@ public final class PleaseStopClient implements ClientModInitializer {
         return isCreativePlayer(client)
                 && client.player.getAbilities().flying
                 && client.player.input != null
-                && CreativeFlightBrake.hasActiveFlightInput(client.player.input.keyPresses);
+                && CreativeFlightBrake.hasActiveFlightInput(client.player.input.keyPresses, client.player.onGround());
     }
 
     private boolean isCreativePlayer(Minecraft client) {
         return client.player != null
+                && client.player.isCreative()
                 && client.gameMode != null
                 && isCreativeGameMode(client.gameMode.getPlayerMode());
     }
@@ -190,36 +191,16 @@ public final class PleaseStopClient implements ClientModInitializer {
         return allowsUserFacingControls(
                 client.player != null,
                 client.player != null && client.player.isCreative(),
-                client.getSingleplayerServer() != null,
-                clientGameType,
-                getSingleplayerSaveGameType(client)
+                clientGameType
         );
     }
 
     static boolean allowsUserFacingControls(
             boolean playerPresent,
             boolean playerCreative,
-            boolean singleplayer,
-            GameType clientGameType,
-            GameType singleplayerSaveGameType
+            GameType clientGameType
     ) {
-        if (!playerPresent || !playerCreative || !isCreativeGameMode(clientGameType)) {
-            return false;
-        }
-
-        if (singleplayer) {
-            return isCreativeGameMode(singleplayerSaveGameType);
-        }
-
-        return true;
-    }
-
-    private GameType getSingleplayerSaveGameType(Minecraft client) {
-        if (client.getSingleplayerServer() == null || client.getSingleplayerServer().getWorldData() == null) {
-            return null;
-        }
-
-        return client.getSingleplayerServer().getWorldData().getGameType();
+        return playerPresent && playerCreative && isCreativeGameMode(clientGameType);
     }
 
     private void saveConfig() {

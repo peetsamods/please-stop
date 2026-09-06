@@ -25,7 +25,7 @@ Please Stop is planned as a Fabric-first client mod. The first implementation sh
 1. Client starts.
 2. Config loads `enabled` from Fabric's config dir, defaulting to `false` and creating `please_stop.json` if missing.
 3. Keybind registration exposes `Toggle Please Stop`.
-4. Pressing the keybind flips `enabled`, saves immediately, logs the new state, and shows local actionbar feedback.
+4. Pressing the keybind flips `enabled`, saves immediately, logs the new state, and shows local actionbar feedback for a currently Creative player. The world's original/default game mode is not an additional gate.
 5. During the narrow movement check, the mod verifies:
    - local player exists;
    - config is enabled;
@@ -38,7 +38,7 @@ Please Stop is planned as a Fabric-first client mod. The first implementation sh
    - swimming state;
    - vehicle state;
    - recently-hurt knockback-adjacent state.
-7. To avoid treating unrelated or server-correction-like velocity as creative-flight inertia, the brake only acts after recent flight input release or immediately after the keybind has toggled the mod on.
+7. To avoid treating unrelated or server-correction-like velocity as creative-flight inertia, the brake only acts after recent flight input release or immediately after the keybind has toggled the mod on. Recent-input tracking uses the same ground/air interpretation as the brake decision.
 8. If all conditions are true, residual creative flight drift is cleared.
 9. If any condition is false, vanilla behavior continues.
 
