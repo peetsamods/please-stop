@@ -14,15 +14,18 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import org.lwjgl.glfw.GLFW;
 
-public final class PleaseStopBeta3ClientGameTest implements FabricClientGameTest {
-    private static final String PROOF = "PLEASE_STOP_BETA3_CLIENT_PROOF";
+public final class PleaseStopBeta5ClientGameTest implements FabricClientGameTest {
+    private static final String PROOF = "PLEASE_STOP_BETA5_CLIENT_PROOF";
 
     @Override
     public void runTest(ClientGameTestContext context) {
         try (TestSingleplayerContext singleplayer = context.worldBuilder()
                 .setUseConsistentSettings(true)
-                .adjustSettings(creator -> creator.setGameMode(WorldCreator.Mode.CREATIVE))
+                .adjustSettings(creator -> creator.setGameMode(WorldCreator.Mode.SURVIVAL))
                 .create()) {
+            context.waitFor(client -> client.player != null && !client.player.isCreative());
+            singleplayer.getServer().runOnServer(server -> server.getPlayerManager().getPlayerList()
+                    .forEach(player -> player.changeGameMode(GameMode.CREATIVE)));
             context.waitFor(client -> client.player != null
                     && client.player.isCreative()
                     && client.player.getAbilities().allowFlying);
@@ -41,10 +44,14 @@ public final class PleaseStopBeta3ClientGameTest implements FabricClientGameTest
                     + " sneakCompatible=true"
                     + " sneakCameraStable=true"
                     + " sneakViewBobSuppressed=true"
+                    + " currentCreativeInSurvivalCreatedWorld=true"
+                    + " groundSneakUnrelatedVelocityPreserved=true"
                     + " manualOff=true"
                     + " manualOffPersists=true"
+                    + " manualOffSurvivesTemporaryExclusion=true"
                     + " masterOffNoOp=true"
-                    + " survivalNoOp=true");
+                    + " survivalNoOp=true"
+                    + " finalEnabled=false");
         }
     }
 
@@ -76,7 +83,7 @@ public final class PleaseStopBeta3ClientGameTest implements FabricClientGameTest
                 "settings screen did not restore Persistent mode");
 
         context.waitTicks(20);
-        Path screenshot = context.takeScreenshot("please-stop-beta3-settings");
+        Path screenshot = context.takeScreenshot("please-stop-beta5-settings");
         require(Files.isRegularFile(screenshot), "settings screenshot was not created");
         context.setScreen(() -> null);
         context.waitForScreen(null);
@@ -128,12 +135,19 @@ public final class PleaseStopBeta3ClientGameTest implements FabricClientGameTest
         context.waitTicks(4);
         context.getInput().releaseKey(options -> options.forwardKey);
         context.waitTicks(2);
-        require(context.computeOnClient(client -> client.player.getVelocity().lengthSquared() < 1.0e-8d),
-                "velocity remained after ground-flight movement was released while Sneak stayed held");
+        require(context.computeOnClient(client -> {
+            Vec3d velocity = client.player.getVelocity();
+            return velocity.x * velocity.x + velocity.z * velocity.z < 1.0e-8d;
+        }), "horizontal velocity remained after ground-flight movement was released while Sneak stayed held");
         require(context.computeOnClient(client -> client.player.getAbilities().flying),
                 "Sneak canceled assisted Creative flight at ground level");
 
         context.getInput().releaseKey(options -> options.sneakKey);
+        context.runOnClient(client -> client.player.setVelocity(new Vec3d(0.25d, 0.0d, 0.0d)));
+        context.waitTicks(1);
+        require(context.computeOnClient(client -> Math.abs(client.player.getVelocity().x) > 0.01d),
+                "ground-level Sneak incorrectly authorized braking unrelated velocity");
+        context.runOnClient(client -> client.player.setVelocity(Vec3d.ZERO));
         context.waitTicks(1);
 
         context.getInput().pressKey(GLFW.GLFW_KEY_V);
@@ -141,6 +155,11 @@ public final class PleaseStopBeta3ClientGameTest implements FabricClientGameTest
         context.waitTicks(2);
         require(context.computeOnClient(client -> !client.player.getAbilities().flying),
                 "manual Flight Assist off was not respected");
+
+        context.runOnClient(client -> client.player.hurtTime = 5);
+        context.waitTicks(1);
+        context.runOnClient(client -> client.player.hurtTime = 0);
+        context.waitTicks(1);
 
         context.runOnClient(client -> {
             client.player.getAbilities().flying = true;
@@ -173,6 +192,13 @@ public final class PleaseStopBeta3ClientGameTest implements FabricClientGameTest
         context.waitTicks(2);
         require(context.computeOnClient(client -> !client.player.getAbilities().flying),
                 "Flight Assist activated outside Creative mode");
+
+        singleplayer.getServer().runOnServer(server -> server.getPlayerManager().getPlayerList()
+                .forEach(player -> player.changeGameMode(GameMode.CREATIVE)));
+        context.waitFor(client -> client.player != null && client.player.isCreative());
+        context.getInput().pressKey(GLFW.GLFW_KEY_B);
+        context.waitFor(client -> !readConfig().isEnabled());
+        require(!readConfig().isEnabled(), "Please Stop was not left disabled after client proof");
     }
 
     private static PleaseStopConfig readConfig() {
