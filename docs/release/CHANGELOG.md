@@ -1,5 +1,12 @@
 # Please Stop Changelog
 
+## 0.1.0-beta.5+26.3
+
+- Add Fabric support for Minecraft 26.3.
+- Preserve an explicit Creative Flight Assist OFF choice through temporary movement exclusions.
+- Use the player's current Creative state for Please Stop controls.
+- Prevent ground-level Sneak by itself from authorizing a later brake of unrelated velocity.
+
 ## 0.1.0-preview.1+26.3-pre.2 - Local Preview
 
 - Prepare a non-public Fabric build for Minecraft `26.3-pre-2` using Java 25 and current preview APIs.

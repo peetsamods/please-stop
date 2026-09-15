@@ -38,7 +38,7 @@ test {
     useJUnitPlatform()
     afterSuite { descriptor, result ->
         if (descriptor.parent == null && !hasCommandLineTestFilter && filter.includePatterns.empty && result.testCount != 38) {
-            throw new GradleException("Expected 38 Fabric 26.3 preview tests, but ran ${result.testCount}.")
+            throw new GradleException("Expected 38 Fabric 26.3 tests, but ran ${result.testCount}.")
         }
     }
 }
