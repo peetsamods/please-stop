@@ -15,7 +15,7 @@ Current behavior:
 - When enabled, creative flight inertia stops immediately after movement, jump, or sneak input is released.
 - When disabled, vanilla creative flight behavior remains unchanged.
 
-Public releases currently include Fabric beta.4 for `1.21.11`, `1.21.1`, and `26.2`, plus NeoForge beta.3 for the `1.21.x` line. The next release candidates are Fabric beta.5 and NeoForge beta.4; they tighten Creative eligibility, preserve explicit Flight Assist choices through temporary exclusions, and strengthen compatibility and release-artifact checks.
+Please Stop 1.0.0 supports Fabric on `1.21.1`, `1.21.11`, `26.2`, and `26.3`, and one shared NeoForge JAR for `1.21.1` and `1.21.11`.
 
 Project docs:
 

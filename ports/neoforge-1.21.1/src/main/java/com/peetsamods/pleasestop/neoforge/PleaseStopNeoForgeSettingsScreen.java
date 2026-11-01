@@ -58,10 +58,15 @@ final class PleaseStopNeoForgeSettingsScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        graphics.drawCenteredString(font, title, width / 2, height / 4 - 18, 0xFFFFFF);
-        graphics.drawCenteredString(font, Component.translatable("screen.please_stop.help"), width / 2, height / 4 - 2, 0xA0A0A0);
-        graphics.drawCenteredString(font, Component.translatable("screen.please_stop.key_hint"), width / 2, height / 4 + 164, 0xA0A0A0);
         super.render(graphics, mouseX, mouseY, partialTick);
+        var helpLines = font.split(Component.translatable("screen.please_stop.help"), Math.max(1, width - 20));
+        int helpY = height / 4 - 2 - (helpLines.size() - 1) * font.lineHeight;
+        graphics.drawCenteredString(font, title, width / 2, helpY - font.lineHeight - 7, 0xFFFFFFFF);
+        for (var line : helpLines) {
+            graphics.drawCenteredString(font, line, width / 2, helpY, 0xFFA0A0A0);
+            helpY += font.lineHeight;
+        }
+        graphics.drawCenteredString(font, Component.translatable("screen.please_stop.key_hint"), width / 2, height / 4 + 164, 0xFFA0A0A0);
     }
 
     @Override

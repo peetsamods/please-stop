@@ -26,7 +26,7 @@ Minecraft APIs and mixin targets can differ within a version line. Where direct 
 
 | Deliverable | Required proof environments | Toolchains | Artifact identity | Status |
 | --- | --- | --- | --- | --- |
-| NeoForge `1.21.x` jar | Minecraft `1.21.1` + NeoForge `21.1.235`; Minecraft `1.21.11` + NeoForge `21.11.42` | ModDevGradle `2.0.141`, Java 21 | Next release: `please-stop-0.1.0-beta.4+1.21.x-neoforge.jar` | Both source/test builds and compiled-hook checks pass; exact same-binary runtime and live acceptance remain required before release |
+| NeoForge `1.21.x` jar | Minecraft `1.21.1` + NeoForge `21.1.235`; Minecraft `1.21.11` + NeoForge `21.11.42` | ModDevGradle `2.0.141`, Java 21 | `please-stop-1.0.0+1.21.x-neoforge.jar` | Supported on both listed environments with the exact same binary |
 
 ## Proof Evidence Ledger
 

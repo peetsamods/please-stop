@@ -61,9 +61,14 @@ final class PleaseStopSettingsScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
-        context.drawCenteredTextWithShadow(textRenderer, title, width / 2, height / 4 - 18, 0xFFFFFF);
-        context.drawCenteredTextWithShadow(textRenderer, Text.translatable("screen.please_stop.help"), width / 2, height / 4 - 2, 0xA0A0A0);
-        context.drawCenteredTextWithShadow(textRenderer, Text.translatable("screen.please_stop.key_hint"), width / 2, height / 4 + 164, 0xA0A0A0);
+        var helpLines = textRenderer.wrapLines(Text.translatable("screen.please_stop.help"), Math.max(1, width - 20));
+        int helpY = height / 4 - 2 - (helpLines.size() - 1) * textRenderer.fontHeight;
+        context.drawCenteredTextWithShadow(textRenderer, title, width / 2, helpY - textRenderer.fontHeight - 7, 0xFFFFFFFF);
+        for (var line : helpLines) {
+            context.drawCenteredTextWithShadow(textRenderer, line, width / 2, helpY, 0xFFA0A0A0);
+            helpY += textRenderer.fontHeight;
+        }
+        context.drawCenteredTextWithShadow(textRenderer, Text.translatable("screen.please_stop.key_hint"), width / 2, height / 4 + 164, 0xFFA0A0A0);
         super.render(context, mouseX, mouseY, deltaTicks);
     }
 

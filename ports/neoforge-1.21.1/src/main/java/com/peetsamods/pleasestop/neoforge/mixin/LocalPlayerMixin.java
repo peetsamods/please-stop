@@ -7,29 +7,36 @@ import net.minecraft.world.level.GameType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Group;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(LocalPlayer.class)
 abstract class LocalPlayerMixin {
+    @Group(name = "pleaseStop$groundFlightCancellation", min = 1, max = 1)
     @Redirect(
             method = "aiStep",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;isAlwaysFlying()Z"
+                    target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;isAlwaysFlying()Z",
+                    ordinal = 1
             ),
-            require = 0
+            require = 0,
+            allow = 1
     )
     private boolean pleaseStop$preserveOwnedGroundFlight1211(MultiPlayerGameMode gameMode) {
         return pleaseStop$preserveOwnedGroundFlight(gameMode);
     }
 
+    @Group(name = "pleaseStop$groundFlightCancellation", min = 1, max = 1)
     @Redirect(
             method = "aiStep",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;isSpectator()Z"
+                    target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;isSpectator()Z",
+                    ordinal = 1
             ),
-            require = 0
+            require = 0,
+            allow = 1
     )
     private boolean pleaseStop$preserveOwnedGroundFlight12111(MultiPlayerGameMode gameMode) {
         return pleaseStop$preserveOwnedGroundFlight(gameMode);

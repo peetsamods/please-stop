@@ -6,7 +6,8 @@
   "environment": "client",
   "entrypoints": {
     "fabric-client-gametest": [
-      "com.peetsamods.pleasestop.client.PleaseStopBeta5ClientGameTest"
+      "com.peetsamods.pleasestop.client.PleaseStopBeta5ClientGameTest",
+      "com.peetsamods.pleasestop.client.GroundFlightPacketClientGameTest"
     ]
   },
   "depends": {
@@ -14,5 +15,8 @@
     "minecraft": "1.21.11",
     "fabric-api": "*",
     "please_stop": "*"
-  }
+  },
+  "mixins": [
+    "please_stop.gametest.mixins.json"
+  ]
 }

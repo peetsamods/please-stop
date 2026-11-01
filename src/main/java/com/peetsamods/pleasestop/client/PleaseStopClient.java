@@ -1,6 +1,7 @@
 package com.peetsamods.pleasestop.client;
 
 import com.peetsamods.pleasestop.config.PleaseStopConfig;
+import net.minecraft.client.network.ClientPlayerEntity;
 import com.peetsamods.pleasestop.core.UserFacingControlsLogic;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -24,6 +25,7 @@ public final class PleaseStopClient implements ClientModInitializer {
     private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     private static final KeyBinding.Category CATEGORY = KeyBinding.Category.create(Identifier.of(MOD_ID, "controls"));
     private static PleaseStopConfig activeConfig;
+    private static CreativeFlightAssist activeFlightAssist;
     private static int suppressedSneakViewBobCount;
 
     private PleaseStopConfig config;
@@ -44,6 +46,7 @@ public final class PleaseStopClient implements ClientModInitializer {
         configPath = FabricLoader.getInstance().getConfigDir().resolve(PleaseStopConfig.FILE_NAME);
         config = loadConfig(configPath);
         activeConfig = config;
+        activeFlightAssist = creativeFlightAssist;
         toggleKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.please_stop.toggle",
                 InputUtil.Type.KEYSYM,
@@ -71,6 +74,12 @@ public final class PleaseStopClient implements ClientModInitializer {
 
         ClientTickEvents.END_CLIENT_TICK.register(this::onEndClientTick);
         LOGGER.info("Please Stop client loaded. enabled={}", config.isEnabled());
+    }
+
+    public static boolean shouldPreserveGroundFlight(ClientPlayerEntity player, boolean flyingLocked) {
+        return activeConfig != null && activeFlightAssist != null
+                && activeFlightAssist.shouldPreserveGroundFlight(player, activeConfig.isEnabled(),
+                activeConfig.creativeFlightAssistMode(), flyingLocked);
     }
 
     public static boolean shouldStabilizeSneakCamera(net.minecraft.client.network.ClientPlayerEntity player) {

@@ -4,8 +4,6 @@
 - The mod is a client convenience. It does not create server authority and does not bypass server correction.
 - Multiplayer, anti-cheat behavior, and broad modpack compatibility are not claimed.
 - Knockback proof is limited to the local recently-hurt gate; it is not proof of every external velocity source.
-- Fabric beta.4 and NeoForge beta.3 are public. The unreleased mainline repairs are covered by automated unit, build, compatibility, and artifact checks, but they have not completed a new exact-JAR live gameplay/profile pass or publication.
-- A future NeoForge line release still requires the exact same built JAR to pass both version-specific runtime harnesses and live checks; separate source builds do not prove that same-binary claim.
 - The settings screen controls local preferences only. Key rebinds remain in Minecraft's standard Controls screen.
 - The default state is disabled. A player must intentionally toggle it on.
 - User-facing Please Stop toggle feedback and the launch reminder toast are creative-only.

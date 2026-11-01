@@ -49,8 +49,8 @@ def hasCommandLineTestFilter = gradle.startParameter.taskRequests.any { request 
 test {
     useJUnitPlatform()
     afterSuite { descriptor, result ->
-        if (descriptor.parent == null && !hasCommandLineTestFilter && filter.includePatterns.empty && result.testCount != 54) {
-            throw new GradleException("Expected 54 root tests, but ran ${result.testCount}.")
+        if (descriptor.parent == null && !hasCommandLineTestFilter && filter.includePatterns.empty && result.testCount != 59) {
+            throw new GradleException("Expected 59 root tests, but ran ${result.testCount}.")
         }
     }
 }

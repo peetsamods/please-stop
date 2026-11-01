@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 final class NeoForgeBinaryCompatibilityTest {
     private static final String FML_ENVIRONMENT = "net/neoforged/fml/loading/FMLEnvironment";
     private static final String REDIRECT = "Lorg/spongepowered/asm/mixin/injection/Redirect;";
+    private static final String GROUP = "Lorg/spongepowered/asm/mixin/injection/Group;";
     private static final String AT = "Lorg/spongepowered/asm/mixin/injection/At;";
     private static final String LEGACY_GROUND_FLIGHT_TARGET =
             "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;isAlwaysFlying()Z";
@@ -117,6 +118,7 @@ final class NeoForgeBinaryCompatibilityTest {
     @Test
     void groundFlightMixinCarriesOptionalHooksForBothRuntimeCallSites() throws IOException {
         List<RedirectTarget> redirects = new ArrayList<>();
+        List<GroundFlightGroup> groups = new ArrayList<>();
         readClass("com/peetsamods/pleasestop/neoforge/mixin/LocalPlayerMixin.class", new ClassVisitor(Opcodes.ASM9) {
             @Override
             public MethodVisitor visitMethod(
@@ -129,6 +131,17 @@ final class NeoForgeBinaryCompatibilityTest {
                 return new MethodVisitor(Opcodes.ASM9) {
                     @Override
                     public AnnotationVisitor visitAnnotation(String annotationDescriptor, boolean visible) {
+                        if (GROUP.equals(annotationDescriptor)) {
+                            GroundFlightGroup group = new GroundFlightGroup();
+                            groups.add(group);
+                            return new AnnotationVisitor(Opcodes.ASM9) {
+                                @Override public void visit(String key, Object value) {
+                                    if ("name".equals(key)) group.name = (String) value;
+                                    if ("min".equals(key)) group.min = (Integer) value;
+                                    if ("max".equals(key)) group.max = (Integer) value;
+                                }
+                            };
+                        }
                         if (!REDIRECT.equals(annotationDescriptor)) {
                             return null;
                         }
@@ -140,6 +153,7 @@ final class NeoForgeBinaryCompatibilityTest {
                                 if ("require".equals(key)) {
                                     redirect.require = (Integer) value;
                                 }
+                                if ("allow".equals(key)) redirect.allow = (Integer) value;
                             }
 
                             @Override
@@ -153,6 +167,7 @@ final class NeoForgeBinaryCompatibilityTest {
                                         if ("target".equals(nestedKey)) {
                                             redirect.target = (String) value;
                                         }
+                                        if ("ordinal".equals(nestedKey)) redirect.ordinal = (Integer) value;
                                     }
                                 };
                             }
@@ -164,7 +179,13 @@ final class NeoForgeBinaryCompatibilityTest {
 
         assertRedirectIsOptional(redirects, LEGACY_GROUND_FLIGHT_TARGET);
         assertRedirectIsOptional(redirects, CURRENT_GROUND_FLIGHT_TARGET);
-        assertFalse(redirects.isEmpty());
+        assertEquals(2, redirects.size());
+        assertEquals(2, groups.size());
+        for (GroundFlightGroup group : groups) {
+            assertEquals("pleaseStop$groundFlightCancellation", group.name);
+            assertEquals(1, group.min, "At least one runtime hook must apply");
+            assertEquals(1, group.max, "Only one runtime hook may apply");
+        }
     }
 
     @Test
@@ -213,6 +234,8 @@ final class NeoForgeBinaryCompatibilityTest {
                 .findFirst()
                 .orElseThrow(() -> new AssertionError("Missing compatibility redirect for " + target));
         assertEquals(0, redirect.require, "Version-specific redirect must be optional when its call site is absent");
+        assertEquals(1, redirect.ordinal, "Leave the entry guard vanilla; intercept only grounded cancellation");
+        assertEquals(1, redirect.allow, "Each alternative may match one grounded call site");
     }
 
     private static void readClass(String resource, ClassVisitor visitor) throws IOException {
@@ -238,6 +261,14 @@ final class NeoForgeBinaryCompatibilityTest {
     private static final class RedirectTarget {
         private String target;
         private int require = -1;
+        private int allow = -1;
+        private int ordinal = -1;
+    }
+
+    private static final class GroundFlightGroup {
+        private String name;
+        private int min = -1;
+        private int max = -1;
     }
 
     public static final class LegacyEnvironment {
