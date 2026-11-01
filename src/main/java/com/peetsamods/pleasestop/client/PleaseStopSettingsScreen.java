@@ -54,9 +54,14 @@ final class PleaseStopSettingsScreen extends Screen {
     @Override
     public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
         context.fill(0, 0, width, height, 0xE0101010);
-        context.centeredText(font, title, width / 2, height / 4 - 18, 0xFFFFFF);
-        context.centeredText(font, Component.translatable("screen.please_stop.help"), width / 2, height / 4 - 2, 0xA0A0A0);
-        context.centeredText(font, Component.translatable("screen.please_stop.key_hint"), width / 2, height / 4 + 164, 0xA0A0A0);
+        var helpLines = font.split(Component.translatable("screen.please_stop.help"), Math.max(1, width - 20));
+        int helpY = height / 4 - 2 - (helpLines.size() - 1) * font.lineHeight;
+        context.centeredText(font, title, width / 2, helpY - font.lineHeight - 7, 0xFFFFFFFF);
+        for (var line : helpLines) {
+            context.centeredText(font, line, width / 2, helpY, 0xFFA0A0A0);
+            helpY += font.lineHeight;
+        }
+        context.centeredText(font, Component.translatable("screen.please_stop.key_hint"), width / 2, height / 4 + 164, 0xFFA0A0A0);
         super.extractRenderState(context, mouseX, mouseY, delta);
     }
 

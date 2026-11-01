@@ -2,6 +2,12 @@
   "required": true,
   "package": "com.peetsamods.pleasestop.mixin.client",
   "compatibilityLevel": "JAVA_25",
-  "client": ["CameraMixin", "GameRendererMixin"],
-  "injectors": {"defaultRequire": 1}
+  "client": [
+    "CameraMixin",
+    "GameRendererMixin",
+    "ClientPlayerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

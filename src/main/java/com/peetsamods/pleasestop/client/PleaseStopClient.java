@@ -1,6 +1,7 @@
 package com.peetsamods.pleasestop.client;
 
 import com.peetsamods.pleasestop.config.PleaseStopConfig;
+import net.minecraft.client.player.LocalPlayer;
 import com.mojang.blaze3d.platform.InputConstants;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -22,6 +23,7 @@ public final class PleaseStopClient implements ClientModInitializer {
     public static final String MOD_ID = "please_stop";
     private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     private static PleaseStopConfig activeConfig;
+    private static CreativeFlightAssist activeFlightAssist;
     private static int suppressedSneakViewBobCount;
     private static final KeyMapping.Category CATEGORY = KeyMapping.Category.register(
             Identifier.fromNamespaceAndPath(MOD_ID, "controls")
@@ -45,6 +47,7 @@ public final class PleaseStopClient implements ClientModInitializer {
         configPath = FabricLoader.getInstance().getConfigDir().resolve(PleaseStopConfig.FILE_NAME);
         config = loadConfig(configPath);
         activeConfig = config;
+        activeFlightAssist = creativeFlightAssist;
         toggleKeyMapping = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.please_stop.toggle",
                 InputConstants.Type.KEYSYM,
@@ -64,6 +67,12 @@ public final class PleaseStopClient implements ClientModInitializer {
 
         ClientTickEvents.END_CLIENT_TICK.register(this::onEndClientTick);
         LOGGER.info("Please Stop client loaded. enabled={}", config.isEnabled());
+    }
+
+    public static boolean shouldPreserveGroundFlight(LocalPlayer player, boolean flyingLocked) {
+        return activeConfig != null && activeFlightAssist != null
+                && activeFlightAssist.shouldPreserveGroundFlight(player, activeConfig.isEnabled(),
+                activeConfig.creativeFlightAssistMode(), flyingLocked);
     }
 
     public static boolean shouldStabilizeSneakCamera(net.minecraft.client.player.LocalPlayer player) {
