@@ -17,6 +17,10 @@ final class CreativeFlightAssist {
     record Transition(Action action, boolean assistActive, boolean manuallyDisabled) {
     }
 
+    record GroundFlightRetention(CreativeFlightAssistMode mode, boolean eligible, boolean onGround,
+                                 boolean flying, boolean assistActive, boolean manuallyDisabled) {
+    }
+
     enum Action { NONE, ACTIVATE, DEACTIVATE, REACTIVATE }
 
     private boolean assistActive;
@@ -65,6 +69,19 @@ final class CreativeFlightAssist {
         }
         wasFlyingLastTick = true;
         return Action.ACTIVATE;
+    }
+
+    boolean shouldPreserveGroundFlight(ClientPlayerEntity player, boolean enabled,
+                                       CreativeFlightAssistMode mode, boolean flyingLocked) {
+        return player != null && shouldPreserveGroundFlight(new GroundFlightRetention(
+                mode, isEligible(player, enabled, flyingLocked), player.isOnGround(),
+                player.getAbilities().flying, assistActive, manuallyDisabled));
+    }
+
+    static boolean shouldPreserveGroundFlight(GroundFlightRetention state) {
+        return state.eligible() && state.onGround() && state.flying() && !state.manuallyDisabled()
+                && (state.mode() == CreativeFlightAssistMode.ALWAYS_ON_IN_CREATIVE
+                || (state.mode() == CreativeFlightAssistMode.PERSISTENT_AFTER_ACTIVATION && state.assistActive()));
     }
 
     static Transition transition(State state) {

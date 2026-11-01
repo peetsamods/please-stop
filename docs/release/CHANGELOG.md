@@ -1,5 +1,14 @@
 # Please Stop Changelog
 
+## 1.0.0 - Stable Release
+
+### FIXED
+- Holding Sneak at ground level no longer repeatedly cancels and restores assisted Creative flight or resends flight updates.
+- Settings headings and help text remain readable over the blurred background.
+
+### IMPROVED
+- Settings help wraps to fit compact windows.
+
 ## 0.1.0-beta.5+1.21.1 - Release Candidate
 
 - Preserve an explicit Creative Flight Assist OFF choice through temporary movement exclusions.
